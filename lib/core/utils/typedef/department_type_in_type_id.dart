@@ -1,0 +1,1 @@
+typedef DepartmentTypeInTypeId = String;

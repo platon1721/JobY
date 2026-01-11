@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:joby/state/constants/firebase_collection_name.dart';
 import 'package:joby/state/constants/firebase_field_name.dart';
 import 'package:joby/state/user_info/models/user_info_payload.dart';
-import 'package:joby/typedef/user_id.dart';
+import 'package:joby/core/utils/typedef/user_id.dart';
 
 
 

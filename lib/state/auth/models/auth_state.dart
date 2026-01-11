@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:joby/state/auth/models/auth_result.dart';
-import 'package:joby/typedef/user_id.dart';
+import 'package:joby/core/utils/typedef/user_id.dart';
 
 part 'auth_state.freezed.dart';
 

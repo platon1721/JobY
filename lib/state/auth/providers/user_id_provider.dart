@@ -1,4 +1,4 @@
-import 'package:joby/typedef/user_id.dart';
+import 'package:joby/core/utils/typedef/user_id.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'authentication_provider.dart';
 
