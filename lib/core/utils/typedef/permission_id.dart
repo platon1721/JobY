@@ -1,0 +1,1 @@
+typedef PermissionId = String;

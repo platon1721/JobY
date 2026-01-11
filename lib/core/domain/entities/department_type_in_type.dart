@@ -4,32 +4,63 @@ import 'package:joby/core/utils/typedef/department_type_id.dart';
 import 'package:joby/core/utils/typedef/department_type_in_type_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 
-class DepartmentTypeInType extends Equatable with Auditable{
+/// Entity defining which department types can be children of other types
+class DepartmentTypeInType extends Equatable with Auditable {
   final DepartmentTypeInTypeId id;
   final DepartmentTypeId parentTypeId;
   final DepartmentTypeId childTypeId;
+
+  @override
+  final DateTime createdAt;
+
+  @override
+  final UserId createdBy;
+
+  @override
+  final DateTime? activeTill;
 
   const DepartmentTypeInType({
     required this.id,
     required this.parentTypeId,
     required this.childTypeId,
+    required this.createdAt,
+    required this.createdBy,
+    this.activeTill,
   });
+
+  /// Check if this relationship is active
+  bool get isActive => activeTill == null || activeTill!.isAfter(DateTime.now());
+
   @override
   List<Object?> get props => [
     id,
     parentTypeId,
     childTypeId,
+    createdAt,
+    createdBy,
+    activeTill,
   ];
 
   @override
-  // TODO: implement activeTill
-  DateTime? get activeTill => throw UnimplementedError();
+  String toString() =>
+      'DepartmentTypeInType(id: $id, parent: $parentTypeId, child: $childTypeId)';
 
-  @override
-  // TODO: implement createdAt
-  DateTime get createdAt => throw UnimplementedError();
-
-  @override
-  // TODO: implement createdBy
-  UserId get createdBy => throw UnimplementedError();
+  /// Create a copy with updated fields
+  DepartmentTypeInType copyWith({
+    DepartmentTypeInTypeId? id,
+    DepartmentTypeId? parentTypeId,
+    DepartmentTypeId? childTypeId,
+    DateTime? createdAt,
+    UserId? createdBy,
+    DateTime? activeTill,
+  }) {
+    return DepartmentTypeInType(
+      id: id ?? this.id,
+      parentTypeId: parentTypeId ?? this.parentTypeId,
+      childTypeId: childTypeId ?? this.childTypeId,
+      createdAt: createdAt ?? this.createdAt,
+      createdBy: createdBy ?? this.createdBy,
+      activeTill: activeTill ?? this.activeTill,
+    );
+  }
 }

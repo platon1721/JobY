@@ -1,15 +1,15 @@
 import 'package:equatable/equatable.dart';
+import 'package:joby/core/domain/enums/permission.dart';
 import 'package:joby/core/domain/mixins/auditable.dart';
 import 'package:joby/core/utils/typedef/permission_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
-import 'package:joby/core/utils/typedef/user_role_id.dart';
-import 'package:joby/core/utils/typedef/user_role_permission_id.dart';
 
-/// Entity mapping permissions to roles
-class UserRolePermissionEntity extends Equatable with Auditable {
-  final UserRolePermissionId id;
-  final UserRoleId roleId;
-  final PermissionId permissionId;
+/// Domain entity for permissions
+class PermissionEntity extends Equatable with Auditable {
+  final PermissionId id;
+  final String code;
+  final String name;
+  final String description;
 
   @override
   final DateTime createdAt;
@@ -20,45 +20,51 @@ class UserRolePermissionEntity extends Equatable with Auditable {
   @override
   final DateTime? activeTill;
 
-  const UserRolePermissionEntity({
+  const PermissionEntity({
     required this.id,
-    required this.roleId,
-    required this.permissionId,
+    required this.code,
+    required this.name,
+    required this.description,
     required this.createdAt,
     required this.createdBy,
     this.activeTill,
   });
 
-  /// Check if this permission assignment is active
+  /// Check if this permission is active
   bool get isActive => activeTill == null || activeTill!.isAfter(DateTime.now());
+
+  /// Get the Permission enum value for this entity
+  Permission? get permissionEnum => Permission.fromCode(code);
 
   @override
   List<Object?> get props => [
     id,
-    roleId,
-    permissionId,
+    code,
+    name,
+    description,
     createdAt,
     createdBy,
     activeTill,
   ];
 
   @override
-  String toString() =>
-      'UserRolePermissionEntity(id: $id, role: $roleId, permission: $permissionId)';
+  String toString() => 'PermissionEntity(id: $id, code: $code, name: $name)';
 
   /// Create a copy with updated fields
-  UserRolePermissionEntity copyWith({
-    UserRolePermissionId? id,
-    UserRoleId? roleId,
-    PermissionId? permissionId,
+  PermissionEntity copyWith({
+    PermissionId? id,
+    String? code,
+    String? name,
+    String? description,
     DateTime? createdAt,
     UserId? createdBy,
     DateTime? activeTill,
   }) {
-    return UserRolePermissionEntity(
+    return PermissionEntity(
       id: id ?? this.id,
-      roleId: roleId ?? this.roleId,
-      permissionId: permissionId ?? this.permissionId,
+      code: code ?? this.code,
+      name: name ?? this.name,
+      description: description ?? this.description,
       createdAt: createdAt ?? this.createdAt,
       createdBy: createdBy ?? this.createdBy,
       activeTill: activeTill ?? this.activeTill,
