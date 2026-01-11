@@ -5,7 +5,7 @@ import 'package:joby/core/utils/typedef/department_type_in_type_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 
 /// Entity defining which department types can be children of other types
-class DepartmentTypeInType extends Equatable with Auditable {
+class DepartmentTypeInTypeEntity extends Equatable with Auditable {
   final DepartmentTypeInTypeId id;
   final DepartmentTypeId parentTypeId;
   final DepartmentTypeId childTypeId;
@@ -19,7 +19,7 @@ class DepartmentTypeInType extends Equatable with Auditable {
   @override
   final DateTime? activeTill;
 
-  const DepartmentTypeInType({
+  const DepartmentTypeInTypeEntity({
     required this.id,
     required this.parentTypeId,
     required this.childTypeId,
@@ -46,7 +46,7 @@ class DepartmentTypeInType extends Equatable with Auditable {
       'DepartmentTypeInType(id: $id, parent: $parentTypeId, child: $childTypeId)';
 
   /// Create a copy with updated fields
-  DepartmentTypeInType copyWith({
+  DepartmentTypeInTypeEntity copyWith({
     DepartmentTypeInTypeId? id,
     DepartmentTypeId? parentTypeId,
     DepartmentTypeId? childTypeId,
@@ -54,7 +54,7 @@ class DepartmentTypeInType extends Equatable with Auditable {
     UserId? createdBy,
     DateTime? activeTill,
   }) {
-    return DepartmentTypeInType(
+    return DepartmentTypeInTypeEntity(
       id: id ?? this.id,
       parentTypeId: parentTypeId ?? this.parentTypeId,
       childTypeId: childTypeId ?? this.childTypeId,
