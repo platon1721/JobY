@@ -26,8 +26,6 @@ class DepartmentTypeEntity extends Equatable with Auditable {
     this.activeTill,
   });
 
-  /// Check if this type is active
-  bool get isActive => activeTill == null || activeTill!.isAfter(DateTime.now());
 
   @override
   List<Object?> get props => [
@@ -60,4 +58,15 @@ class DepartmentTypeEntity extends Equatable with Auditable {
       activeTill: activeTill ?? this.activeTill,
     );
   }
+
+  /// Check for active status
+  bool get isActive => activeTill == null || activeTill!.isAfter(DateTime.now());
+
+  /// Deactivate this relationship
+  DepartmentTypeEntity deactivate() {
+    return copyWith(activeTill: DateTime.now());
+  }
+
+  /// TODO: implement logic for safe delete. If departmentType has children, if department has departments, etc.
+
 }

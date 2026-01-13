@@ -28,9 +28,6 @@ class UserUserRoleEntity extends Equatable with Auditable {
     this.activeTill,
   });
 
-  /// Check if this role assignment is active
-  bool get isActive => activeTill == null || activeTill!.isAfter(DateTime.now());
-
   @override
   List<Object?> get props => [
     id,
@@ -61,5 +58,13 @@ class UserUserRoleEntity extends Equatable with Auditable {
       createdBy: createdBy ?? this.createdBy,
       activeTill: activeTill ?? this.activeTill,
     );
+  }
+
+  /// Check for active status
+  bool get isActive => activeTill == null || activeTill!.isAfter(DateTime.now());
+
+  /// Deactivate this relationship
+  UserUserRoleEntity deactivate() {
+    return copyWith(activeTill: DateTime.now());
   }
 }

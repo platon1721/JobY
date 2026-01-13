@@ -30,9 +30,6 @@ class PermissionEntity extends Equatable with Auditable {
     this.activeTill,
   });
 
-  /// Check if this permission is active
-  bool get isActive => activeTill == null || activeTill!.isAfter(DateTime.now());
-
   /// Get the Permission enum value for this entity
   Permission? get permissionEnum => Permission.fromCode(code);
 
@@ -70,4 +67,15 @@ class PermissionEntity extends Equatable with Auditable {
       activeTill: activeTill ?? this.activeTill,
     );
   }
+
+  /// Check for active status
+  bool get isActive => activeTill == null || activeTill!.isAfter(DateTime.now());
+
+  /// Deactivate this relationship
+  PermissionEntity deactivate() {
+    return copyWith(activeTill: DateTime.now());
+  }
+
+  /// TODO: implement logic for safe delete. If permission is assigned to roles, delete with permission user_role_permissions
+
 }

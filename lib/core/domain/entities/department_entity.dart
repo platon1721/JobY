@@ -9,7 +9,6 @@ class DepartmentEntity extends Equatable with Auditable {
   final DepartmentId id;
   final String name;
   final DepartmentTypeId typeId;
-  final DepartmentId? parentId;
   final int level;
 
   @override
@@ -25,33 +24,28 @@ class DepartmentEntity extends Equatable with Auditable {
     required this.id,
     required this.name,
     required this.typeId,
-    this.parentId,
     required this.level,
     required this.createdAt,
     required this.createdBy,
     this.activeTill,
   });
 
-  /// Проверяет, является ли это корневым отделом (компанией)
-  bool get isRootDepartment => parentId == null && level == 0;
+  // TODO: Check if is root department
 
-  /// Check if can be deleted
-  bool canBeDeleted() {
-    // Root department cannot be deleted
-    if (isRootDepartment) return false;
-    // Inactive departments can be deleted
-    return activeTill != null;
-  }
 
-  /// Check for active status
-  bool get isActive => activeTill == null || activeTill!.isAfter(DateTime.now());
+  ///TODO: Check if can be deleted
+  // bool canBeDeleted() {
+  //   // Root department cannot be deleted
+  //   if (isRootDepartment) return false;
+  //   // Inactive departments can be deleted
+  //   return activeTill != null;
+  // }
 
   @override
   List<Object?> get props => [
     id,
     name,
     typeId,
-    parentId,
     level,
     createdBy,
     createdAt,
@@ -77,11 +71,21 @@ class DepartmentEntity extends Equatable with Auditable {
       id: id ?? this.id,
       name: name ?? this.name,
       typeId: typeId ?? this.typeId,
-      parentId: parentId ?? this.parentId,
       level: level ?? this.level,
       createdAt: createdAt ?? this.createdAt,
       createdBy: createdBy ?? this.createdBy,
       activeTill: activeTill ?? this.activeTill,
     );
   }
+
+  /// Check for active status
+  bool get isActive => activeTill == null || activeTill!.isAfter(DateTime.now());
+
+  /// Deactivate this relationship
+  DepartmentEntity deactivate() {
+    return copyWith(activeTill: DateTime.now());
+  }
+
+  /// TODO: implement logic for safe delete. If department has children, if department has users, etc.
+
 }

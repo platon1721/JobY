@@ -29,8 +29,6 @@ class UserRolePermissionEntity extends Equatable with Auditable {
     this.activeTill,
   });
 
-  /// Check if this permission assignment is active
-  bool get isActive => activeTill == null || activeTill!.isAfter(DateTime.now());
 
   @override
   List<Object?> get props => [
@@ -63,5 +61,13 @@ class UserRolePermissionEntity extends Equatable with Auditable {
       createdBy: createdBy ?? this.createdBy,
       activeTill: activeTill ?? this.activeTill,
     );
+  }
+
+  /// Check for active status
+  bool get isActive => activeTill == null || activeTill!.isAfter(DateTime.now());
+
+  /// Deactivate this relationship
+  UserRolePermissionEntity deactivate() {
+    return copyWith(activeTill: DateTime.now());
   }
 }

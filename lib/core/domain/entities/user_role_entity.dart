@@ -26,9 +26,6 @@ class UserRoleEntity extends Equatable with Auditable {
     this.activeTill,
   });
 
-  /// Check if role is active
-  bool get isActive => activeTill == null || activeTill!.isAfter(DateTime.now());
-
   @override
   List<Object?> get props => [
     id,
@@ -60,4 +57,15 @@ class UserRoleEntity extends Equatable with Auditable {
       activeTill: activeTill ?? this.activeTill,
     );
   }
+
+  /// Check for active status
+  bool get isActive => activeTill == null || activeTill!.isAfter(DateTime.now());
+
+  /// Deactivate this relationship
+  UserRoleEntity deactivate() {
+    return copyWith(activeTill: DateTime.now());
+  }
+
+  /// TODO: implement logic for safe delete. If role has department_user assigned, prevent deletion.
+
 }

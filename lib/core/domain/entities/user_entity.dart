@@ -32,9 +32,6 @@ class UserEntity extends Equatable with Auditable {
   /// Get full name of the user
   String get fullName => '$firstName $surName';
 
-  /// Check if user is active
-  bool get isActive => activeTill == null || activeTill!.isAfter(DateTime.now());
-
   @override
   List<Object?> get props => [
     userId,
@@ -72,4 +69,15 @@ class UserEntity extends Equatable with Auditable {
       activeTill: activeTill ?? this.activeTill,
     );
   }
+
+  /// Check for active status
+  bool get isActive => activeTill == null || activeTill!.isAfter(DateTime.now());
+
+  /// Deactivate this relationship
+  UserEntity deactivate() {
+    return copyWith(activeTill: DateTime.now());
+  }
+
+  /// TODO: implement logic for safe delete. If user is member of any department, delete department_user relationships first
+
 }
