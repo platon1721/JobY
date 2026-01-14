@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:joby/core/domain/enums/permission.dart';
-import 'package:joby/core/domain/repositories/permission_repository.dart';
-import 'package:joby/core/domain/repositories/user_role_permission_repository.dart';
-import 'package:joby/core/domain/repositories/user_user_role_repository.dart';
+import 'package:joby/core/domain/repos/shared/user_role_permission_repository.dart';
+import 'package:joby/core/domain/repos/shared/user_user_role_repository.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
+import 'package:joby/features/permissions/domain/repos/permission_repository.dart';
 
 /// Domain service for permision checking logic
 /// This service orchestrates multiple repositories to check permissions

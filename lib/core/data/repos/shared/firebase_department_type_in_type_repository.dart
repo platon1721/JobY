@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:joby/core/data/models/department_type_model.dart';
-import 'package:joby/core/data/models/department_type_in_type_model.dart';
-import 'package:joby/core/domain/entities/department_type_entity.dart';
-import 'package:joby/core/domain/entities/department_type_in_type_entity.dart';
-import 'package:joby/core/domain/repos/department_type_in_type_repository.dart';
+import 'package:joby/core/data/models/shared/department_type_in_type_model.dart';
+import 'package:joby/core/domain/entities/shared/department_type_in_type_entity.dart';
+import 'package:joby/core/domain/repos/shared/department_type_in_type_repository.dart';
 import 'package:joby/core/errors/exceptions.dart';
 import 'package:joby/core/utils/typedef/department_type_id.dart';
 import 'package:joby/core/utils/typedef/department_type_in_type_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
+import 'package:joby/features/departments/data/models/department_type_model.dart';
+import 'package:joby/features/departments/domain/entities/department_type_entity.dart';
 
 class FirebaseDepartmentTypeInTypeRepository implements DepartmentTypeInTypeRepository {
   final FirebaseFirestore _firestore;

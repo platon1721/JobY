@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:joby/core/domain/entities/user_role_permission_entity.dart';
+import 'package:joby/core/domain/entities/shared/user_role_permission_entity.dart';
 import 'package:joby/core/utils/typedef/permission_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 import 'package:joby/core/utils/typedef/user_role_id.dart';

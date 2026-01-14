@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:joby/core/domain/entities/user_entity.dart';
-import 'package:joby/core/domain/entities/user_role_entity.dart';
-import 'package:joby/core/domain/entities/user_user_role_entity.dart';
+import 'package:joby/core/domain/entities/shared/user_user_role_entity.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 import 'package:joby/core/utils/typedef/user_role_id.dart';
 import 'package:joby/core/utils/typedef/user_user_role_id.dart';
+import 'package:joby/features/permissions/domain/entities/user_role_entity.dart';
+import 'package:joby/features/users/domain/entities/user_entity.dart';
 
 /// Abstract repository for UserUserRole operations
 /// Junction table: manages relationships between users and roles

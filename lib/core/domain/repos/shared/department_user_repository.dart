@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:joby/core/domain/entities/department_user_entity.dart';
-import 'package:joby/core/domain/entities/user_entity.dart';
+import 'package:joby/core/domain/entities/shared/department_user_entity.dart';
 import 'package:joby/core/utils/typedef/department_id.dart';
 import 'package:joby/core/utils/typedef/department_user_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 import 'package:joby/core/utils/typedef/user_role_id.dart';
+import 'package:joby/features/users/domain/entities/user_entity.dart';
 
 /// Repository for DepartmentUser (user membership in departments)
 abstract class DepartmentUserRepository {

@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:joby/core/domain/entities/user_user_role_entity.dart';
-import 'package:joby/core/domain/repos/user_user_role_repository.dart';
+import 'package:joby/core/domain/entities/shared/user_user_role_entity.dart';
+import 'package:joby/core/domain/repos/shared/user_user_role_repository.dart';
 import 'package:joby/core/domain/use_cases/common/use_case.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 import 'package:joby/core/utils/typedef/user_role_id.dart';

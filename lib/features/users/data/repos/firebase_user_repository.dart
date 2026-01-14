@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:joby/core/data/models/user_model.dart';
-import 'package:joby/core/domain/entities/user_entity.dart';
-import 'package:joby/core/domain/repos/user_repository.dart';
 import 'package:joby/core/errors/exceptions.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
+import 'package:joby/features/users/data/models/user_model.dart';
+import 'package:joby/features/users/domain/entities/user_entity.dart';
+import 'package:joby/features/users/domain/repos/user_repository.dart';
 
 /// Firebase implementation of UserRepository
 class FirebaseUserRepository implements UserRepository {
@@ -62,7 +62,7 @@ class FirebaseUserRepository implements UserRepository {
     try {
       final snapshot = await _collection
           .where('email', isGreaterThanOrEqualTo: email)
-          .where('email', isLessThan: email + 'z')
+          .where('email', isLessThan: '${email}z')
           .get();
 
       final users = snapshot.docs

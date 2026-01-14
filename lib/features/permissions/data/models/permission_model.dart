@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:joby/core/domain/entities/permission_entity.dart';
 import 'package:joby/core/utils/typedef/permission_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
+import 'package:joby/features/permissions/domain/entities/permission_entity.dart';
 
 /// Model for Permission with Firebase support
 class PermissionModel extends PermissionEntity {

@@ -14,7 +14,7 @@ class MainView extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('User is logged in with ID: ' + userId.toString()),
+            Text('User is logged in with ID: $userId'),
             ElevatedButton(
               onPressed: () {
                 ref.read(authenticationProvider.notifier).logOut();

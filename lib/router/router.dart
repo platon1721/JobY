@@ -1,24 +1,24 @@
-
-
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:joby/views/authentication/auth_view.dart';
-import 'package:joby/views/authentication/register/register_view.dart';
+import 'package:joby/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:joby/features/auth/presentation/controllers/auth_state.dart';
 
-/// JobY route configuration.
-final GoRouter router = GoRouter(
-    routes: <GoRoute>[
-      GoRoute(
-        path: '/',
-        builder: (BuildContext context, GoRouterState state) {
-          return const AuthView();
-        },
-      ),
-      GoRoute(
-        path: '/register',
-        builder: (BuildContext context, GoRouterState state) {
-          return const RegisterView();
-        },
-      )
-    ]
-);
+final routerProvider = Provider<GoRouter>((ref) {
+  final authState = ref.watch(authControllerProvider);
+  GoRouter(
+    redirect: (context, state) {
+      final isAuthenticated = authState is AuthStateAuthenticated;
+
+      if (!isAuthenticated && state.matchedLocation == 'home') {
+        return '/login';
+      }
+
+      if (isAuthenticated && state.matchedLocation == '/login') {
+        return '/home';
+      }
+
+      return null;
+    }
+  );
+
+});

@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:joby/core/domain/entities/user_entity.dart';
-import 'package:joby/core/errors/exceptions.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
+import 'package:joby/features/users/domain/entities/user_entity.dart';
 
 /// Abstract repository for User operations
 /// This interface defines what operations are available

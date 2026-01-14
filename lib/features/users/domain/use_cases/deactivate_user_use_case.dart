@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:joby/core/domain/repos/user_repository.dart';
 import 'package:joby/core/domain/use_cases/common/use_case.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
+import 'package:joby/features/users/domain/repos/user_repository.dart';
 
 /// Use case for deactivating a user (soft delete)
 class DeactivateUserUseCase extends UseCase<void, DeactivateUserParams> {

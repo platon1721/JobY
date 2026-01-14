@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:joby/core/domain/entities/user_entity.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
+import 'package:joby/features/users/domain/entities/user_entity.dart';
 
 /// Model for User with Firebase support
 class UserModel extends UserEntity {

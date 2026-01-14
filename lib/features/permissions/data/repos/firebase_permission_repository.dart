@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:joby/core/data/models/permission_model.dart';
-import 'package:joby/core/domain/entities/permission_entity.dart';
-import 'package:joby/core/domain/repos/permission_repository.dart';
 import 'package:joby/core/errors/exceptions.dart';
 import 'package:joby/core/utils/typedef/permission_id.dart';
+import 'package:joby/features/permissions/data/models/permission_model.dart';
+import 'package:joby/features/permissions/domain/entities/permission_entity.dart';
+import 'package:joby/features/permissions/domain/repos/permission_repository.dart';
 
 /// Firebase implementation of PermissionRepository
 class FirebasePermissionRepository implements PermissionRepository {

@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:joby/core/domain/entities/department_type_entity.dart';
-import 'package:joby/core/domain/entities/department_type_in_type_entity.dart';
+import 'package:joby/core/domain/entities/shared/department_type_in_type_entity.dart';
 import 'package:joby/core/utils/typedef/department_type_id.dart';
 import 'package:joby/core/utils/typedef/department_type_in_type_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
+import 'package:joby/features/departments/domain/entities/department_type_entity.dart';
 
 /// Repository for DepartmentTypeInType (type hierarchy rules)
 abstract class DepartmentTypeInTypeRepository {

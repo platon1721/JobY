@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:joby/core/domain/entities/department_type_entity.dart';
 import 'package:joby/core/utils/typedef/department_type_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
+import 'package:joby/features/departments/domain/entities/department_type_entity.dart';
 
 /// Model for DepartmentType with Firebase support
 class DepartmentTypeModel extends DepartmentTypeEntity {

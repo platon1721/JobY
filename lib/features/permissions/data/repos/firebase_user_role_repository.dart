@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:joby/core/data/models/user_role_model.dart';
-import 'package:joby/core/domain/entities/user_role_entity.dart';
-import 'package:joby/core/domain/repos/user_role_repository.dart';
 import 'package:joby/core/errors/exceptions.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 import 'package:joby/core/utils/typedef/user_role_id.dart';
+import 'package:joby/features/permissions/data/models/user_role_model.dart';
+import 'package:joby/features/permissions/domain/entities/user_role_entity.dart';
+import 'package:joby/features/permissions/domain/repos/user_role_repository.dart';
 
 /// Firebase implementation of UserRoleRepository
 class FirebaseUserRoleRepository implements UserRoleRepository {
@@ -64,7 +64,7 @@ class FirebaseUserRoleRepository implements UserRoleRepository {
     try {
       final snapshot = await _collection
           .where('name', isGreaterThanOrEqualTo: name)
-          .where('name', isLessThan: name + 'z')
+          .where('name', isLessThan: '${name}z')
           .get();
 
       final roles = snapshot.docs

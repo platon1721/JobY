@@ -1,17 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:joby/core/data/models/permission_model.dart';
-import 'package:joby/core/data/models/user_role_model.dart';
-import 'package:joby/core/data/models/user_role_permission_model.dart';
-import 'package:joby/core/domain/entities/permission_entity.dart';
-import 'package:joby/core/domain/entities/user_role_entity.dart';
-import 'package:joby/core/domain/entities/user_role_permission_entity.dart';
-import 'package:joby/core/domain/repos/user_role_permission_repository.dart';
+import 'package:joby/core/data/models/shared/user_role_permission_model.dart';
+import 'package:joby/core/domain/entities/shared/user_role_permission_entity.dart';
+import 'package:joby/core/domain/repos/shared/user_role_permission_repository.dart';
 import 'package:joby/core/errors/exceptions.dart';
 import 'package:joby/core/utils/typedef/permission_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 import 'package:joby/core/utils/typedef/user_role_id.dart';
 import 'package:joby/core/utils/typedef/user_role_permission_id.dart';
+import 'package:joby/features/permissions/data/models/permission_model.dart';
+import 'package:joby/features/permissions/data/models/user_role_model.dart';
+import 'package:joby/features/permissions/domain/entities/permission_entity.dart';
+import 'package:joby/features/permissions/domain/entities/user_role_entity.dart';
 
 /// Firebase implementation of UserRolePermissionRepository
 class FirebaseUserRolePermissionRepository implements UserRolePermissionRepository {

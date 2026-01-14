@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:joby/core/domain/entities/department_in_department_entity.dart';
+import 'package:joby/core/domain/entities/shared/department_in_department_entity.dart';
 import 'package:joby/core/utils/typedef/department_id.dart';
 import 'package:joby/core/utils/typedef/department_in_department_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';

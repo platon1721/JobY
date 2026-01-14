@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:joby/core/domain/entities/user_role_entity.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 import 'package:joby/core/utils/typedef/user_role_id.dart';
+import 'package:joby/features/permissions/domain/entities/user_role_entity.dart';
 
 /// Abstract repository for UserRole operations
 /// Handles CRUD operations for roles

@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:joby/core/data/models/department_in_department_model.dart';
-import 'package:joby/core/data/models/department_model.dart';
-import 'package:joby/core/domain/entities/department_entity.dart';
-import 'package:joby/core/domain/entities/department_in_department_entity.dart';
-import 'package:joby/core/domain/repos/department_in_department_repository.dart';
+import 'package:joby/core/data/models/shared/department_in_department_model.dart';
+import 'package:joby/core/domain/entities/shared/department_in_department_entity.dart';
+import 'package:joby/core/domain/repos/shared/department_in_department_repository.dart';
 import 'package:joby/core/errors/exceptions.dart';
 import 'package:joby/core/utils/typedef/department_id.dart';
 import 'package:joby/core/utils/typedef/department_in_department_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
+import 'package:joby/features/departments/data/models/department_model.dart';
+import 'package:joby/features/departments/domain/entities/department_entity.dart';
 
 /// Firebase implementation of DepartmentInDepartmentRepository
 class FirebaseDepartmentInDepartmentRepository

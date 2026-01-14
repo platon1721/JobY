@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:joby/core/domain/entities/user_role_entity.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 import 'package:joby/core/utils/typedef/user_role_id.dart';
+import 'package:joby/features/permissions/domain/entities/user_role_entity.dart';
 
 /// Model for UserRole with Firebase support
 class UserRoleModel extends UserRoleEntity {

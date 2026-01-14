@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:joby/core/domain/entities/permission_entity.dart';
 import 'package:joby/core/utils/typedef/permission_id.dart';
+import 'package:joby/features/permissions/domain/entities/permission_entity.dart';
 
 /// Abstract repository for Permission operations
 /// Handles CRUD operations for permissions only

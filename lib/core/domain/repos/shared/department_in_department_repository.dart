@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:joby/core/domain/entities/department_entity.dart';
-import 'package:joby/core/domain/entities/department_in_department_entity.dart';
+import 'package:joby/core/domain/entities/shared/department_in_department_entity.dart';
 import 'package:joby/core/utils/typedef/department_id.dart';
 import 'package:joby/core/utils/typedef/department_in_department_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
+import 'package:joby/features/departments/domain/entities/department_entity.dart';
 
 /// Abstract repository for DepartmentInDepartment operations
 /// Junction table managing hierarchical relationships between departments

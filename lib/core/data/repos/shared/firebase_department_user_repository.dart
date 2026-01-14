@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:joby/core/data/models/department_user_model.dart';
-import 'package:joby/core/data/models/user_model.dart';
-import 'package:joby/core/domain/entities/department_user_entity.dart';
-import 'package:joby/core/domain/entities/user_entity.dart';
-import 'package:joby/core/domain/repos/department_user_repository.dart';
+import 'package:joby/core/data/models/shared/department_user_model.dart';
+import 'package:joby/core/domain/entities/shared/department_user_entity.dart';
+import 'package:joby/core/domain/repos/shared/department_user_repository.dart';
 import 'package:joby/core/errors/exceptions.dart';
 import 'package:joby/core/utils/typedef/department_id.dart';
 import 'package:joby/core/utils/typedef/department_user_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 import 'package:joby/core/utils/typedef/user_role_id.dart';
+import 'package:joby/features/users/data/models/user_model.dart';
+import 'package:joby/features/users/domain/entities/user_entity.dart';
 
 class FirebaseDepartmentUserRepository implements DepartmentUserRepository {
   final FirebaseFirestore _firestore;
