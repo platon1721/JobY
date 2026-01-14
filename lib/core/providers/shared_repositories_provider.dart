@@ -1,3 +1,4 @@
+import 'package:joby/features/permissions/presentation/providers/permissions_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:joby/core/providers/firebase_provider.dart';
 import 'package:joby/core/domain/repos/shared/user_user_role_repository.dart';
@@ -71,6 +72,6 @@ PermissionCheckerService permissionCheckerService(Ref ref) {
   return PermissionCheckerService(
     userUserRoleRepository: ref.watch(userUserRoleRepositoryProvider),
     userRolePermissionRepository: ref.watch(userRolePermissionRepositoryProvider),
-    //permissionRepository: ref.watch(permissionRepositoryProvider), // TODO: Add when permissions feature has providers
+    permissionRepository: ref.watch(permissionRepositoryProvider),
   );
 }
