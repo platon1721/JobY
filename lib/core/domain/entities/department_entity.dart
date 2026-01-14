@@ -9,7 +9,7 @@ class DepartmentEntity extends Equatable with Auditable {
   final DepartmentId id;
   final String name;
   final DepartmentTypeId typeId;
-  final int level;
+  final int hierarchyLevel;
 
   @override
   final DateTime createdAt;
@@ -24,7 +24,7 @@ class DepartmentEntity extends Equatable with Auditable {
     required this.id,
     required this.name,
     required this.typeId,
-    required this.level,
+    required this.hierarchyLevel,
     required this.createdAt,
     required this.createdBy,
     this.activeTill,
@@ -46,7 +46,7 @@ class DepartmentEntity extends Equatable with Auditable {
     id,
     name,
     typeId,
-    level,
+    hierarchyLevel,
     createdBy,
     createdAt,
     activeTill,
@@ -54,7 +54,7 @@ class DepartmentEntity extends Equatable with Auditable {
 
   @override
   String toString() =>
-      'DepartmentEntity(id: $id, name: $name, typeId: $typeId, level: $level)';
+      'DepartmentEntity(id: $id, name: $name, typeId: $typeId, hierarchy_level: $hierarchyLevel)';
 
   /// Create a copy with updated fields
   DepartmentEntity copyWith({
@@ -62,7 +62,7 @@ class DepartmentEntity extends Equatable with Auditable {
     String? name,
     DepartmentTypeId? typeId,
     DepartmentId? parentId,
-    int? level,
+    int? hierarchyLevel,
     DateTime? createdAt,
     UserId? createdBy,
     DateTime? activeTill,
@@ -71,7 +71,7 @@ class DepartmentEntity extends Equatable with Auditable {
       id: id ?? this.id,
       name: name ?? this.name,
       typeId: typeId ?? this.typeId,
-      level: level ?? this.level,
+      hierarchyLevel: hierarchyLevel ?? this.hierarchyLevel,
       createdAt: createdAt ?? this.createdAt,
       createdBy: createdBy ?? this.createdBy,
       activeTill: activeTill ?? this.activeTill,

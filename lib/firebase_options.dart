@@ -47,17 +47,17 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCvFI98W7DPBc91E9Z45PIBmOR3G14_j9s',
-    appId: '1:67200924558:web:414993f9508af62b2cc2df',
-    messagingSenderId: '67200924558',
-    projectId: 'joby-af0c9',
-    authDomain: 'joby-af0c9.firebaseapp.com',
-    storageBucket: 'joby-af0c9.firebasestorage.app',
-    measurementId: 'G-CDFRKCHV69',
+    apiKey: "AIzaSyBvT3Q6q2pt7nW_72_TG2z2O7-Li6QngVk",
+    authDomain: "joby-af0c9.firebaseapp.com",
+    projectId: "joby-af0c9",
+    storageBucket: "joby-af0c9.firebasestorage.app",
+    messagingSenderId: "67200924558",
+    appId: "1:67200924558:web:414993f9508af62b2cc2df",
+    measurementId: "G-CDFRKCHV69",
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCdpBopHE_TRM6x56PPoTSinqmdBYoCLOY',
+    apiKey: 'AIzaSyB2rF0RpLPFCJstmWCYOOPNDkEsDrXpp8c',
     appId: '1:67200924558:android:26c6d04868203e932cc2df',
     messagingSenderId: '67200924558',
     projectId: 'joby-af0c9',
@@ -65,7 +65,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBgkEX8UuTXVFt8d1uRMwddP_LYzYT7l24',
+    apiKey: 'AIzaSyAy8cX2_yUy9U7cgqPPMFbe57SqvvD38r4',
     appId: '1:67200924558:ios:b4e8476209ef1dbc2cc2df',
     messagingSenderId: '67200924558',
     projectId: 'joby-af0c9',

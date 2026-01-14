@@ -5,6 +5,7 @@ import 'package:joby/core/utils/typedef/user_id.dart';
 
 /// Abstract repository for User operations
 /// This interface defines what operations are available
+/// The actual implementation (Firebase, SQL, etc) is in data layer
 abstract class UserRepository {
   /// Get user by ID
   /// Returns Either<Exception, UserEntity>
@@ -47,6 +48,6 @@ abstract class UserRepository {
 
   /// Get users by department
   Future<Either<Exception, List<UserEntity>>> getUsersByDepartment(
-      String departmentId,
-      );
+    String departmentId,
+  );
 }

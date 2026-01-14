@@ -15,14 +15,14 @@ class FirebaseUserRepository implements UserRepository {
       : _firestore = firestore ?? FirebaseFirestore.instance;
 
   /// Helper to get collection reference
-  CollectionReference get _collection =>
+  CollectionReference get _collection => 
       _firestore.collection(_collectionName);
 
   @override
   Future<Either<Exception, UserEntity>> getUserById(UserId userId) async {
     try {
       final doc = await _collection.doc(userId).get();
-
+      
       if (!doc.exists) {
         return Left(NotFoundException('User with id $userId not found'));
       }
@@ -57,8 +57,8 @@ class FirebaseUserRepository implements UserRepository {
 
   @override
   Future<Either<Exception, List<UserEntity>>> getUsersByEmail(
-      String email,
-      ) async {
+    String email,
+  ) async {
     try {
       final snapshot = await _collection
           .where('email', isGreaterThanOrEqualTo: email)
@@ -149,8 +149,8 @@ class FirebaseUserRepository implements UserRepository {
             .where('email', isEqualTo: email)
             .limit(1)
             .get();
-
-        if (existingUsers.docs.isNotEmpty &&
+        
+        if (existingUsers.docs.isNotEmpty && 
             existingUsers.docs.first.id != userId) {
           return Left(ValidationException('Email $email is already taken'));
         }
@@ -211,8 +211,8 @@ class FirebaseUserRepository implements UserRepository {
 
   @override
   Future<Either<Exception, List<UserEntity>>> getUsersByDepartment(
-      String departmentId,
-      ) async {
+    String departmentId,
+  ) async {
     try {
       // Get department_users where department_id matches
       final departmentUsersSnapshot = await _firestore
@@ -238,7 +238,7 @@ class FirebaseUserRepository implements UserRepository {
         final snapshot = await _collection
             .where(FieldPath.documentId, whereIn: batch)
             .get();
-
+        
         users.addAll(
           snapshot.docs.map((doc) => UserModel.fromFirestore(doc)),
         );

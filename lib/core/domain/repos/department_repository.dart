@@ -5,80 +5,92 @@ import 'package:joby/core/utils/typedef/department_type_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 
 /// Abstract repository for Department operations
-/// Departments have hierarchical structure (tree)
+/// 
+/// NOTE: Department hierarchy is now managed through DepartmentInDepartmentRepository
+/// This repository focuses on CRUD operations for departments themselves
 abstract class DepartmentRepository {
   /// Get department by ID
   Future<Either<Exception, DepartmentEntity>> getDepartmentById(
-      DepartmentId departmentId,
-      );
+    DepartmentId departmentId,
+  );
 
-  /// Get all departments
+  /// Get all active departments
   Future<Either<Exception, List<DepartmentEntity>>> getAllDepartments();
-
-  /// Get root department (company level, where parentId is null)
-  Future<Either<Exception, DepartmentEntity>> getRootDepartment();
-
-  /// Get child departments of a parent
-  Future<Either<Exception, List<DepartmentEntity>>> getChildDepartments(
-      DepartmentId parentId,
-      );
 
   /// Get departments by type
   Future<Either<Exception, List<DepartmentEntity>>> getDepartmentsByType(
-      DepartmentTypeId typeId,
-      );
+    DepartmentTypeId typeId,
+  );
 
-  /// Get all departments in a tree (recursive)
-  /// Returns department and all its children as flat list
-  Future<Either<Exception, List<DepartmentEntity>>> getDepartmentTree(
-      DepartmentId rootId,
-      );
+  /// Get departments by name (search)
+  Future<Either<Exception, List<DepartmentEntity>>> getDepartmentsByName(
+    String name,
+  );
 
-  /// Get department hierarchy path (from root to department)
-  /// Example: Company -> Division -> Department -> Team
-  Future<Either<Exception, List<DepartmentEntity>>> getDepartmentPath(
-      DepartmentId departmentId,
-      );
+  /// Get departments by hierarchy level
+  /// Level 0 = root departments (companies)
+  /// Level 1 = first level children (e.g., divisions)
+  /// etc.
+  Future<Either<Exception, List<DepartmentEntity>>> getDepartmentsByHierarchyLevel(
+    int hierarchyLevel,
+  );
 
   /// Create new department
+  /// Note: Parent-child relationship must be created separately 
+  /// in DepartmentInDepartmentRepository
   Future<Either<Exception, DepartmentEntity>> createDepartment({
     required String name,
     required DepartmentTypeId typeId,
-    required DepartmentId? parentId,
+    required int hierarchyLevel,
     required UserId createdBy,
   });
 
-  /// Update department
+  /// Update department basic info (name, type)
+  /// Note: To change parent, use DepartmentInDepartmentRepository.moveDepartment
   Future<Either<Exception, DepartmentEntity>> updateDepartment({
     required DepartmentId departmentId,
     String? name,
     DepartmentTypeId? typeId,
   });
 
-  /// Move department to new parent
-  /// This also updates the level of all children
-  Future<Either<Exception, void>> moveDepartment({
+  /// Update department hierarchy level (cached depth)
+  /// This is typically called automatically by moveDepartment in DepartmentInDepartmentRepository
+  /// Should NOT be called directly by application code
+  Future<Either<Exception, DepartmentEntity>> updateDepartmentHierarchyLevel({
     required DepartmentId departmentId,
-    required DepartmentId newParentId,
+    required int newHierarchyLevel,
   });
 
   /// Deactivate department (soft delete)
-  /// Also deactivates all child departments
+  /// WARNING: This should also deactivate all relationships in 
+  /// DepartmentInDepartmentRepository
   Future<Either<Exception, void>> deactivateDepartment({
     required DepartmentId departmentId,
     required DateTime deactivationDate,
   });
 
-  /// Check if department can have this type as child
-  /// Based on department_type_in_type rules
-  Future<Either<Exception, bool>> canHaveChildType({
-    required DepartmentId parentId,
-    required DepartmentTypeId childTypeId,
-  });
+  /// Check if department exists
+  Future<Either<Exception, bool>> departmentExists(DepartmentId departmentId);
 
-  /// Validate department hierarchy
-  /// Checks for circular references, depth limits, etc.
-  Future<Either<Exception, bool>> validateHierarchy(
-      DepartmentId departmentId,
-      );
+  /// Check if department name exists (for validation)
+  Future<Either<Exception, bool>> departmentNameExists(String name);
+
+  /// Get department count by type
+  /// Useful for analytics and validation
+  Future<Either<Exception, int>> getDepartmentCountByType(
+    DepartmentTypeId typeId,
+  );
+
+  /// Get department count by hierarchy level
+  /// Useful for analytics
+  Future<Either<Exception, int>> getDepartmentCountByHierarchyLevel(
+    int hierarchyLevel,
+  );
+
+  /// Bulk create departments
+  /// Useful for initial setup or imports
+  Future<Either<Exception, List<DepartmentEntity>>> bulkCreateDepartments({
+    required List<DepartmentEntity> departments,
+    required UserId createdBy,
+  });
 }
