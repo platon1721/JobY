@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:joby/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:joby/features/auth/presentation/controllers/auth_state.dart';
 import 'package:joby/features/auth/presentation/views/login_view.dart';
+import 'package:joby/features/auth/presentation/views/register_view.dart';
 import 'package:joby/views/main/main_view.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -21,22 +22,30 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: 'home',
         builder: (context, state) => const MainView(),
       ),
+      GoRoute(
+        path: '/register',
+        name: 'register',
+        builder: (context, state) => const RegisterView(),
+      )
     ],
     redirect: (context, state) {
       final isAuthenticated = authState is AuthStateAuthenticated;
-      final isLoggingIn = state.matchedLocation == '/login';
+      final location = state.matchedLocation;
 
-      // Kui ei ole sisse logitud ja ei ole login lehel, suuna login lehele
-      if (!isAuthenticated && !isLoggingIn) {
-        return '/login';
+      if (isAuthenticated) {
+        if (location == '/login' || location == '/register') {
+          return '/home'; // Suuna home lehele kui on juba sisse logitud
+        }
+        return null;
       }
 
-      // Kui on sisse logitud ja on login lehel, suuna home lehele
-      if (isAuthenticated && isLoggingIn) {
-        return '/home';
+      if (!isAuthenticated) {
+        if (location == '/register') {
+          return null; // Jäta kasutaja register lehele
+        }
+        return '/login'; // Suuna login lehele kui pole sisse logitud
       }
 
-      // Muul juhul jää praegusel lehel
       return null;
     },
   );

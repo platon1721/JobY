@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:joby/views/constants/app_colors.dart';
-import 'package:joby/views/constants/app_strings.dart';
+import 'package:joby/theme/app_colors.dart';
+import 'package:joby/theme/app_strings.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class LoadingScreen {

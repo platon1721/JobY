@@ -30,3 +30,13 @@ String? validateName (String? name) {
   }
   return null;
 }
+
+String? validateConfirmPassword(String? password, String? confirmPassword) {
+  if (confirmPassword == null || confirmPassword.isEmpty) {
+    return 'Please confirm your password';
+  }
+  if (password != confirmPassword) {
+    return 'Passwords do not match';
+  }
+  return null;
+}

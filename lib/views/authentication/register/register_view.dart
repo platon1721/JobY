@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:joby/core/utils/validators/validators.dart';
 import 'package:joby/state/auth/models/auth_result.dart';
 import 'package:joby/state/auth/providers/authentication_provider.dart';
 import 'package:joby/state/auth/providers/is_logged_in_provider.dart';
-import 'package:joby/views/authentication/validators/validators.dart';
-import 'package:joby/views/authentication/widgets/divider_with_margins.dart';
-import 'package:joby/views/constants/app_colors.dart';
-import 'package:joby/views/constants/app_strings.dart';
+import 'package:joby/features/auth/presentation/widgets/divider_with_margins.dart';
+import 'package:joby/theme/app_colors.dart';
+import 'package:joby/theme/app_strings.dart';
 
 
 
