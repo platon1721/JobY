@@ -334,4 +334,4 @@ final class PermissionCheckerServiceProvider
 }
 
 String _$permissionCheckerServiceHash() =>
-    r'58ec78583ea799173409cf6af2df9e4b9b5ec6be';
+    r'52737c31c23ef28853424ec13402a75d42d18ad2';

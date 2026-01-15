@@ -91,10 +91,15 @@ class AuthController extends _$AuthController {
       ),
     );
 
-    result.fold((error) {
-      final errorMessage = _getErrorMessage(error).toString();
-      state = AuthState.error(errorMessage);
-    }, (user) => state = AuthState.authenticated(user));
+    result.fold(
+            (error) {
+              final errorMessage = _getErrorMessage(error).toString();
+              state = AuthState.error(errorMessage);
+              },
+            (user) {
+              state = AuthState.authenticated(user);
+            },
+    );
   }
 
   Exception _getErrorMessage(Exception error) {

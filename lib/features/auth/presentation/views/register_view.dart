@@ -5,6 +5,8 @@ import 'package:joby/core/utils/validators/validators.dart';
 import 'package:joby/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:joby/features/auth/presentation/controllers/auth_state.dart';
 import 'package:joby/features/auth/presentation/widgets/divider_with_margins.dart';
+import 'package:joby/features/users/domain/use_cases/create_user_use_case.dart';
+import 'package:joby/features/users/presentation/providers/user_providers.dart';
 import 'package:joby/state/auth/providers/authentication_provider.dart';
 import 'package:joby/theme/app_colors.dart';
 import 'package:joby/theme/app_strings.dart';
@@ -21,7 +23,8 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  final _nameController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _surNameController = TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
 
@@ -30,7 +33,8 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
-    _nameController.dispose();
+    _firstNameController.dispose();
+    _surNameController.dispose();
     super.dispose();
   }
 
@@ -41,8 +45,59 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
           .register(
             email: _emailController.text.trim(),
             password: _passwordController.text,
-            displayName: _nameController.text,
           );
+      if (mounted && ref.read(authControllerProvider) is AuthStateAuthenticated) {
+        final authState = ref.read(authControllerProvider);
+        authState.maybeWhen(
+                      authenticated: (authUser) async {
+                        await _saveUserToFirestore(authUser.uid);
+                      },
+            orElse: () {},);
+      }
+    }
+  }
+
+  Future<void> _saveUserToFirestore(String uid) async {
+    try {
+      final createUserUseCase = ref.read(createUserUseCaseProvider);
+
+      final result = await createUserUseCase(
+        CreateUserParams(
+          firstName: _firstNameController.text.trim(),
+          surName: _surNameController.text.trim(),
+          email: _emailController.text.trim(),
+          phoneNumber: null,
+          createdBy: uid,
+        ),
+      );
+
+      result.fold(
+            (error) {
+          // Logi viga
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Saving user data error: $error'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+            (user) {
+          if (mounted) {
+            context.go('/home');
+          }
+        },
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Unknown error: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -90,9 +145,20 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                 const DividerWithMargins(20),
                 // Subheader
                 TextFormField(
-                  controller: _nameController,
+                  controller: _firstNameController,
                   decoration: const InputDecoration(
-                    labelText: "Name",
+                    labelText: "First Name",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                    ),
+                  ),
+                  validator: validateName,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _surNameController,
+                  decoration: const InputDecoration(
+                    labelText: "Surname",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(8.0)),
                     ),
