@@ -1,6 +1,8 @@
 /// Data Layer exceptions
 library;
 
+
+
 /// Server exceptions
 class ServerException implements Exception {
   final String message;

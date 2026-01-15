@@ -26,7 +26,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/register',
         name: 'register',
         builder: (context, state) => const RegisterView(),
-      )
+      ),
     ],
     redirect: (context, state) {
       final isAuthenticated = authState is AuthStateAuthenticated;
@@ -39,14 +39,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         return null;
       }
 
-      if (!isAuthenticated) {
-        if (location == '/register') {
-          return null; // Jäta kasutaja register lehele
-        }
-        return '/login'; // Suuna login lehele kui pole sisse logitud
+      if (!isAuthenticated && location != '/register' && location != '/login') {
+        return '/login';
       }
-
       return null;
+       // Suuna login lehele kui pole sisse logitud
     },
   );
 });

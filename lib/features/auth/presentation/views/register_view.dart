@@ -50,7 +50,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authControllerProvider);
 
-    ref.listen<AuthState>(authControllerProvider, (previous, next) {
+    ref.listen(authControllerProvider, (previous, next) {
       next.maybeWhen(
         authenticated: (user) {
           if (mounted) {
@@ -63,7 +63,6 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
               SnackBar(
                 content: Text(message),
                 backgroundColor: Colors.red,
-                duration: const Duration(seconds: 3),
               ),
             );
           }
