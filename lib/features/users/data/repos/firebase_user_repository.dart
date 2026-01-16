@@ -80,29 +80,25 @@ class FirebaseUserRepository implements UserRepository {
 
   @override
   Future<Either<Exception, UserEntity>> createUser({
+    required UserId userId,  // Uue kasutaja ID (auth UID)
     required String firstName,
     required String surName,
     required String email,
     String? phoneNumber,
-    required UserId createdBy,
+    required UserId createdBy,  // Kes lõi (võib olla sama või admin)
   }) async {
     try {
-      // Check if user with this email already exists
-      final existingUsers = await _collection
-          .where('email', isEqualTo: email)
-          .limit(1)
-          .get();
+      final docRef = _collection.doc(userId);
 
-      if (existingUsers.docs.isNotEmpty) {
-        return Left(ValidationException('User with email $email already exists'));
+      final existingDoc = await docRef.get();
+      if (existingDoc.exists) {
+        return Left(ValidationException('User already exists'));
       }
 
-      // Create new user document
-      final docRef = _collection.doc();
       final now = DateTime.now();
 
       final user = UserModel(
-        userId: docRef.id,
+        userId: userId,
         firstName: firstName,
         surName: surName,
         email: email,

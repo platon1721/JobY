@@ -20,4 +20,6 @@ class AuthState with _$AuthState {
 
   /// Error state
   const factory AuthState.error(String message) = AuthStateError;
+
+  const factory AuthState.registering(AuthUserEntity user) = AuthStateRegistering;
 }

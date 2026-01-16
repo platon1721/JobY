@@ -6,6 +6,7 @@ import 'package:joby/features/auth/presentation/controllers/auth_controller.dart
 import 'package:joby/features/auth/presentation/controllers/auth_state.dart';
 import 'package:joby/features/auth/presentation/widgets/divider_with_margins.dart';
 import 'package:joby/features/users/domain/use_cases/create_user_use_case.dart';
+import 'package:joby/features/users/presentation/controllers/user_controller.dart';
 import 'package:joby/features/users/presentation/providers/user_providers.dart';
 import 'package:joby/state/auth/providers/authentication_provider.dart';
 import 'package:joby/theme/app_colors.dart';
@@ -40,64 +41,12 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
 
   Future<void> _attemptRegister() async {
     if (_formKey.currentState!.validate()) {
-      await ref
-          .read(authControllerProvider.notifier)
-          .register(
-            email: _emailController.text.trim(),
-            password: _passwordController.text,
-          );
-      if (mounted && ref.read(authControllerProvider) is AuthStateAuthenticated) {
-        final authState = ref.read(authControllerProvider);
-        authState.maybeWhen(
-                      authenticated: (authUser) async {
-                        await _saveUserToFirestore(authUser.uid);
-                      },
-            orElse: () {},);
-      }
-    }
-  }
-
-  Future<void> _saveUserToFirestore(String uid) async {
-    try {
-      final createUserUseCase = ref.read(createUserUseCaseProvider);
-
-      final result = await createUserUseCase(
-        CreateUserParams(
-          firstName: _firstNameController.text.trim(),
-          surName: _surNameController.text.trim(),
-          email: _emailController.text.trim(),
-          phoneNumber: null,
-          createdBy: uid,
-        ),
+      await ref.read(authControllerProvider.notifier).register(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+        firstName: _firstNameController.text.trim(),
+        surName: _surNameController.text.trim(),
       );
-
-      result.fold(
-            (error) {
-          // Logi viga
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Saving user data error: $error'),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
-        },
-            (user) {
-          if (mounted) {
-            context.go('/home');
-          }
-        },
-      );
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Unknown error: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
     }
   }
 

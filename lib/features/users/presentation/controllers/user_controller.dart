@@ -1,7 +1,9 @@
 
+import 'package:joby/core/utils/typedef/user_id.dart';
 import 'package:joby/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:joby/features/auth/presentation/controllers/auth_state.dart';
 import 'package:joby/features/auth/presentation/providers/auth_providers.dart';
+import 'package:joby/features/users/domain/use_cases/create_user_use_case.dart';
 import 'package:joby/features/users/domain/use_cases/get_user_by_id_use_case.dart';
 import 'package:joby/features/users/domain/use_cases/update_user_use_case.dart';
 import 'package:joby/features/users/presentation/controllers/user_state.dart';
@@ -120,6 +122,46 @@ class UserController extends _$UserController {
       );
     } catch (e) {
       state = UserState.error('Viga kasutaja laadmisel: $e');
+    }
+  }
+
+  Future<bool> createUserAfterRegistration({
+    required UserId id,
+    required String firstName,
+    required String surName,
+    required String email,
+    String? phoneNumber,
+    required String createdBy,
+  }) async {
+    state = const UserState.loading();
+
+    try {
+      final createUserUseCase = ref.read(createUserUseCaseProvider);
+
+      final result = await createUserUseCase(
+        CreateUserParams(
+          userId: id,
+          firstName: firstName,
+          surName: surName,
+          email: email,
+          phoneNumber: phoneNumber,
+          createdBy: createdBy,
+        ),
+      );
+
+      return result.fold(
+            (error) {
+          state = UserState.error(error.toString());
+          return false;
+        },
+            (user) {
+          state = UserState.loaded(user);
+          return true;
+        },
+      );
+    } catch (e) {
+      state = UserState.error('Kasutaja loomine ebaõnnestus: $e');
+      return false;
     }
   }
 

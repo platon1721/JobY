@@ -44,7 +44,7 @@ final class UserControllerProvider
   }
 }
 
-String _$userControllerHash() => r'80b8e33809e4eca9c0104a2146511b0020138bf1';
+String _$userControllerHash() => r'37be213a902f15461053d0ce718a6bedd43eb935';
 
 /// UserController - haldab kasutaja olekut ja operatsioone
 

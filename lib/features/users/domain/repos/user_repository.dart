@@ -20,6 +20,7 @@ abstract class UserRepository {
 
   /// Create new user
   Future<Either<Exception, UserEntity>> createUser({
+    required UserId userId,
     required String firstName,
     required String surName,
     required String email,

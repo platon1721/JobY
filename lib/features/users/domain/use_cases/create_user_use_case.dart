@@ -14,6 +14,7 @@ class CreateUserUseCase extends UseCase<UserEntity, CreateUserParams> {
   @override
   Future<Either<Exception, UserEntity>> call(CreateUserParams params) {
     return repository.createUser(
+      userId: params.userId,
       firstName: params.firstName,
       surName: params.surName,
       email: params.email,
@@ -25,6 +26,7 @@ class CreateUserUseCase extends UseCase<UserEntity, CreateUserParams> {
 
 /// Parameters for CreateUserUseCase
 class CreateUserParams extends Equatable {
+  final UserId userId;
   final String firstName;
   final String surName;
   final String email;
@@ -32,6 +34,7 @@ class CreateUserParams extends Equatable {
   final UserId createdBy;
 
   const CreateUserParams({
+    required this.userId,
     required this.firstName,
     required this.surName,
     required this.email,

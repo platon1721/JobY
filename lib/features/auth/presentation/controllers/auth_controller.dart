@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:joby/core/errors/exceptions.dart';
+import 'package:joby/features/users/domain/use_cases/create_user_use_case.dart';
+import 'package:joby/features/users/presentation/providers/user_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:joby/features/auth/domain/use_cases/login_with_email_password_use_case.dart';
 import 'package:joby/features/auth/domain/use_cases/register_use_case.dart';
@@ -28,12 +30,18 @@ class AuthController extends _$AuthController {
     final authStateChangesUseCase = ref.read(authStateChangesUseCaseProvider);
 
     authStateChangesUseCase().listen((user) {
-      if (state is AuthStateError || state is AuthStateLoading) {
+      print('AUTH STREAM: received user: ${user?.uid}, current state: $state');
+
+      // Lisa ka registering kontroll!
+      if (state is AuthStateError || state is AuthStateLoading || state is AuthStateRegistering) {
+        print('AUTH STREAM: ignoring because state is $state');
         return;
       }
       if (user != null) {
+        print('AUTH STREAM: setting authenticated');
         state = AuthState.authenticated(user);
       } else {
+        print('AUTH STREAM: setting unauthenticated');
         state = const AuthState.unauthenticated();
       }
     });
@@ -77,11 +85,15 @@ class AuthController extends _$AuthController {
   Future<void> register({
     required String email,
     required String password,
+    required String firstName,
+    required String surName,
     String? displayName,
   }) async {
+    print('AUTH: register() started');
     state = const AuthState.loading();
 
     final registerUseCase = ref.read(registerUseCaseProvider);
+    final createUserUseCase = ref.read(createUserUseCaseProvider);
 
     final result = await registerUseCase(
       RegisterParams(
@@ -91,15 +103,45 @@ class AuthController extends _$AuthController {
       ),
     );
 
-    result.fold(
-            (error) {
-              final errorMessage = _getErrorMessage(error).toString();
-              state = AuthState.error(errorMessage);
-              },
-            (user) {
-              state = AuthState.authenticated(user);
-            },
+    await result.fold(
+          (error) async {
+        print('AUTH: register failed: $error');
+        final errorMessage = _getErrorMessage(error).toString();
+        state = AuthState.error(errorMessage);
+      },
+          (authUser) async {
+        print('AUTH: auth success, creating user in Firestore...');
+
+        // Loo kasutaja kohe siin!
+        final userResult = await createUserUseCase(
+          CreateUserParams(
+            userId: authUser.uid,
+            firstName: firstName,
+            surName: surName,
+            email: email,
+            createdBy: authUser.uid,
+          ),
+        );
+
+        userResult.fold(
+              (error) {
+            print('AUTH: user creation failed: $error');
+            state = AuthState.error('User creation failed: $error');
+          },
+              (user) {
+            print('AUTH: user created successfully');
+            state = AuthState.authenticated(authUser);
+          },
+        );
+      },
     );
+  }
+
+  void completeRegistration() {
+    if (state is AuthStateRegistering) {
+      final user = (state as AuthStateRegistering).user;
+      state = AuthState.authenticated(user);
+    }
   }
 
   Exception _getErrorMessage(Exception error) {

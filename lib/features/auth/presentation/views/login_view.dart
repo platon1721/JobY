@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:joby/core/utils/validators/validators.dart';
 import 'package:joby/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:joby/features/auth/presentation/controllers/auth_state.dart';
 import 'package:joby/features/auth/presentation/widgets/divider_with_margins.dart';
+import 'package:joby/features/auth/presentation/widgets/gradient_background.dart';
 import 'package:joby/theme/app_colors.dart';
 import 'package:joby/theme/app_strings.dart';
+import 'package:pretty_animated_text/pretty_animated_text.dart';
 
 class LoginView extends ConsumerStatefulWidget {
   const LoginView({super.key});
@@ -61,9 +64,16 @@ class _LoginViewState extends ConsumerState<LoginView> {
       );
     });
 
-    return Scaffold(
+    return GradientBackground(child:
+    Scaffold(
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text(AppStrings.appTitle),
+          backgroundColor: Colors.transparent,
+          title: Text(AppStrings.appTitle, style: GoogleFonts.bricolageGrotesque(
+              fontWeight: FontWeight.w500,
+              fontSize: 30,
+              color: Colors.white
+          )),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -75,12 +85,16 @@ class _LoginViewState extends ConsumerState<LoginView> {
                   children: [
                     // Header
                     const SizedBox(height: 40),
-                    Text(
-                      "Welcome to JobY",
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .displaySmall,
+                    OffsetText(
+                      text: 'Welcome to JobY',
+                      duration: const Duration(seconds: 4),
+                      type: AnimationType.word,
+                      slideType: SlideAnimationType.leftRight,
+                      textStyle: (GoogleFonts.pacifico(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 50,
+                          color: Colors.white
+                      )),
                     ),
                     const  DividerWithMargins(20),
                     // Subheader
@@ -144,7 +158,9 @@ class _LoginViewState extends ConsumerState<LoginView> {
               ),
             ),
           ),
-        ));
+        ))
+    );
+
     // return Scaffold(
     //   body: SafeArea(
     //     child: Center(
