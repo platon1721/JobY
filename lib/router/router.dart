@@ -8,6 +8,11 @@ import 'package:joby/features/auth/presentation/views/register_view.dart';
 import 'package:joby/features/auth/presentation/views/welcome_view.dart';
 import 'package:joby/features/dashboard/presentation/views/dashboard_view.dart';
 import 'package:joby/features/dashboard/presentation/views/profile_view.dart';
+import 'package:joby/features/departments/presentation/views/department_detail_view.dart';
+import 'package:joby/features/departments/presentation/views/department_types_view.dart';
+import 'package:joby/features/departments/presentation/views/departments_views.dart';
+import 'package:joby/features/permissions/presentation/views/roles_view.dart';
+import 'package:joby/features/permissions/presentation/views/role_detail_view.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authNotifier = ValueNotifier<AuthState>(const AuthState.initial());
@@ -17,9 +22,10 @@ final routerProvider = Provider<GoRouter>((ref) {
   });
 
   return GoRouter(
-    initialLocation: '/welcome',  // Muudetud: algab welcome view'st
+    initialLocation: '/welcome',
     refreshListenable: authNotifier,
     routes: [
+      // Auth routes
       GoRoute(
         path: '/welcome',
         name: 'welcome',
@@ -35,6 +41,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: 'register',
         builder: (context, state) => const RegisterView(),
       ),
+
+      // Main app routes
       GoRoute(
         path: '/home',
         name: 'home',
@@ -44,6 +52,43 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/profile',
         name: 'profile',
         builder: (context, state) => const ProfileView(),
+      ),
+
+      // Department routes
+      GoRoute(
+        path: '/departments',
+        name: 'departments',
+        builder: (context, state) => const DepartmentsView(),
+      ),
+      GoRoute(
+        path: '/departments/:id',
+        name: 'department-detail',
+        builder: (context, state) {
+          final departmentId = state.pathParameters['id']!;
+          return DepartmentDetailView(departmentId: departmentId);
+        },
+      ),
+
+      // Department Types route
+      GoRoute(
+        path: '/department-types',
+        name: 'department-types',
+        builder: (context, state) => const DepartmentTypesView(),
+      ),
+
+      // Role/Permission routes
+      GoRoute(
+        path: '/roles',
+        name: 'roles',
+        builder: (context, state) => const RolesView(),
+      ),
+      GoRoute(
+        path: '/roles/:id',
+        name: 'role-detail',
+        builder: (context, state) {
+          final roleId = state.pathParameters['id']!;
+          return RoleDetailView(roleId: roleId);
+        },
       ),
     ],
     redirect: (context, state) {

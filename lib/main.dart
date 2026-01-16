@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:joby/firebase_options.dart';
 import 'package:joby/router/router.dart';
-import 'package:joby/theme/app_strings.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

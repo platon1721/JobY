@@ -75,6 +75,30 @@ class _DashboardDrawerState extends ConsumerState<DashboardDrawer> {
                         title: 'Settings',
                         onTap: () => Navigator.pop(context),
                       ),
+                      SideMenuItem(
+                        icon: Icons.business,
+                        title: 'Departments',
+                        onTap: () {
+                          Navigator.pop(context);
+                          context.push('/departments');
+                        },
+                      ),
+                    SideMenuItem(
+                        icon: Icons.category,
+                        title: 'Department Types',
+                        onTap: () {
+                          Navigator.pop(context);
+                          context.push('/department-types');
+                          },
+                    ),
+                      SideMenuItem(
+                        icon: Icons.security,
+                        title: 'Roles & Permissions',
+                        onTap: () {
+                          Navigator.pop(context);
+                          context.push('/roles');
+                        },
+                      ),
                     ],
                   ),
                 ),
