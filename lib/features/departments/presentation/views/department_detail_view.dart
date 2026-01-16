@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:joby/features/departments/domain/entities/department_entity.dart';
 import 'package:joby/features/departments/presentation/controllers/department_controller.dart';
+import 'package:joby/features/departments/presentation/controllers/department_hierarchy_controller.dart';
+import 'package:joby/features/departments/presentation/controllers/department_hierarchy_state.dart';
 import 'package:joby/features/departments/presentation/controllers/department_state.dart';
+import 'package:joby/features/departments/presentation/widgets/add_child_department_dialog.dart';
 
 class DepartmentDetailView extends ConsumerStatefulWidget {
   final String departmentId;
@@ -17,24 +20,58 @@ class DepartmentDetailView extends ConsumerStatefulWidget {
 }
 
 class _DepartmentDetailViewState extends ConsumerState<DepartmentDetailView> {
+  List<DepartmentEntity> _childDepartments = [];
+  DepartmentEntity? _parentDepartment;
+  bool _isLoadingHierarchy = false;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(departmentControllerProvider.notifier).loadDepartmentById(widget.departmentId);
+      _loadHierarchyInfo();
     });
+  }
+
+  Future<void> _loadHierarchyInfo() async {
+    setState(() => _isLoadingHierarchy = true);
+
+    final hierarchyController = ref.read(departmentHierarchyControllerProvider.notifier);
+
+    // Load children
+    final children = await hierarchyController.getChildDepartments(widget.departmentId);
+    
+    // Load parent
+    final parent = await hierarchyController.getParentDepartment(widget.departmentId);
+
+    if (mounted) {
+      setState(() {
+        _childDepartments = children;
+        _parentDepartment = parent;
+        _isLoadingHierarchy = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final departmentState = ref.watch(departmentControllerProvider);
 
+    // Listen for hierarchy changes to reload
+    ref.listen<DepartmentHierarchyState>(
+      departmentHierarchyControllerProvider,
+      (previous, next) {
+        if (next is DepartmentHierarchyStateSuccess) {
+          _loadHierarchyInfo();
+        }
+      },
+    );
+
     return Scaffold(
       appBar: AppBar(
-        title: departmentState.maybeWhen(
-          detail: (dept) => Text(dept.name),
-          orElse: () => const Text('Department Details'),
-        ),
+        title: departmentState is DepartmentStateDetail
+            ? Text((departmentState as DepartmentStateDetail).department.name)
+            : const Text('Department Details'),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
@@ -44,12 +81,13 @@ class _DepartmentDetailViewState extends ConsumerState<DepartmentDetailView> {
           ),
         ],
       ),
-      body: departmentState.maybeWhen(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        detail: (department) => _buildDepartmentDetails(department),
-        error: (message) => _buildErrorState(message),
-        orElse: () => const Center(child: Text('Loading...')),
-      ),
+      body: departmentState is DepartmentStateLoading
+          ? const Center(child: CircularProgressIndicator())
+          : departmentState is DepartmentStateDetail
+              ? _buildDepartmentDetails((departmentState as DepartmentStateDetail).department)
+              : departmentState is DepartmentStateError
+                  ? _buildErrorState((departmentState as DepartmentStateError).message)
+                  : const Center(child: Text('Loading...')),
     );
   }
 
@@ -114,6 +152,43 @@ class _DepartmentDetailViewState extends ConsumerState<DepartmentDetailView> {
             ),
           ),
           const SizedBox(height: 24),
+
+          // Parent Department (if exists)
+          if (_parentDepartment != null) ...[
+            Text(
+              'Parent Department',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 12),
+            Card(
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: _getColorForLevel(_parentDepartment!.hierarchyLevel),
+                  child: Text(
+                    _parentDepartment!.name.isNotEmpty 
+                        ? _parentDepartment!.name[0].toUpperCase() 
+                        : '?',
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+                title: Text(_parentDepartment!.name),
+                subtitle: Text(_getLevelName(_parentDepartment!.hierarchyLevel)),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  // Navigate to parent
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DepartmentDetailView(
+                        departmentId: _parentDepartment!.id,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 24),
+          ],
 
           // Department Info
           Text(
@@ -192,6 +267,11 @@ class _DepartmentDetailViewState extends ConsumerState<DepartmentDetailView> {
                     TextButton.icon(
                       onPressed: () {
                         // TODO: Add member
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Add Member feature coming soon'),
+                          ),
+                        );
                       },
                       icon: const Icon(Icons.person_add),
                       label: const Text('Add Member'),
@@ -203,46 +283,106 @@ class _DepartmentDetailViewState extends ConsumerState<DepartmentDetailView> {
           ),
           const SizedBox(height: 24),
 
-          // Child Departments section (placeholder)
+          // Child Departments section
           Text(
             'Child Departments',
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 12),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Center(
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.account_tree_outlined,
-                      size: 48,
-                      color: Colors.grey[400],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'No child departments',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextButton.icon(
-                      onPressed: () {
-                        // TODO: Add child department
-                      },
-                      icon: const Icon(Icons.add),
-                      label: const Text('Add Child Department'),
-                    ),
-                  ],
+          _buildChildDepartmentsSection(department),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChildDepartmentsSection(DepartmentEntity department) {
+    if (_isLoadingHierarchy) {
+      return const Card(
+        child: Padding(
+          padding: EdgeInsets.all(32),
+          child: Center(child: CircularProgressIndicator()),
+        ),
+      );
+    }
+
+    if (_childDepartments.isEmpty) {
+      return Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Center(
+            child: Column(
+              children: [
+                Icon(
+                  Icons.account_tree_outlined,
+                  size: 48,
+                  color: Colors.grey[400],
                 ),
+                const SizedBox(height: 8),
+                Text(
+                  'No child departments',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey[600],
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextButton.icon(
+                  onPressed: () => _showAddChildDialog(department),
+                  icon: const Icon(Icons.add),
+                  label: const Text('Add Child Department'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Card(
+      child: Column(
+        children: [
+          ..._childDepartments.map((child) => ListTile(
+            leading: CircleAvatar(
+              backgroundColor: _getColorForLevel(child.hierarchyLevel),
+              child: Text(
+                child.name.isNotEmpty ? child.name[0].toUpperCase() : '?',
+                style: const TextStyle(color: Colors.white),
               ),
             ),
+            title: Text(child.name),
+            subtitle: Text(_getLevelName(child.hierarchyLevel)),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DepartmentDetailView(
+                    departmentId: child.id,
+                  ),
+                ),
+              );
+            },
+          )),
+          const Divider(height: 1),
+          TextButton.icon(
+            onPressed: () => _showAddChildDialog(department),
+            icon: const Icon(Icons.add),
+            label: const Text('Add Child Department'),
           ),
         ],
       ),
     );
+  }
+
+  void _showAddChildDialog(DepartmentEntity department) {
+    showDialog(
+      context: context,
+      builder: (context) => AddChildDepartmentDialog(parentDepartment: department),
+    ).then((result) {
+      // Reload hierarchy info after dialog closes
+      if (result == true) {
+        _loadHierarchyInfo();
+      }
+    });
   }
 
   String _getLevelName(int level) {

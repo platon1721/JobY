@@ -9,6 +9,7 @@ import 'package:joby/features/auth/presentation/views/welcome_view.dart';
 import 'package:joby/features/dashboard/presentation/views/dashboard_view.dart';
 import 'package:joby/features/dashboard/presentation/views/profile_view.dart';
 import 'package:joby/features/departments/presentation/views/department_detail_view.dart';
+import 'package:joby/features/departments/presentation/views/department_hierarchy_view.dart';
 import 'package:joby/features/departments/presentation/views/department_types_view.dart';
 import 'package:joby/features/departments/presentation/views/departments_views.dart';
 import 'package:joby/features/permissions/presentation/views/roles_view.dart';
@@ -67,6 +68,13 @@ final routerProvider = Provider<GoRouter>((ref) {
           final departmentId = state.pathParameters['id']!;
           return DepartmentDetailView(departmentId: departmentId);
         },
+      ),
+
+      // Department Hierarchy route
+      GoRoute(
+        path: '/department-hierarchy',
+        name: 'department-hierarchy',
+        builder: (context, state) => const DepartmentHierarchyView(),
       ),
 
       // Department Types route
