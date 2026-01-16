@@ -17,27 +17,24 @@ final routerProvider = Provider<GoRouter>((ref) {
   });
 
   return GoRouter(
-    initialLocation: '/login',
+    initialLocation: '/welcome',  // Muudetud: algab welcome view'st
     refreshListenable: authNotifier,
     routes: [
       GoRoute(
-          path: '/welcome',
-          name: 'welcome',
-          builder: (context, state) => const WelcomeView(),
+        path: '/welcome',
+        name: 'welcome',
+        builder: (context, state) => const WelcomeView(),
       ),
-      // Auth routes
       GoRoute(
         path: '/login',
         name: 'login',
-        builder: (context, state) => const WelcomeView(),
+        builder: (context, state) => const LoginView(),
       ),
       GoRoute(
         path: '/register',
         name: 'register',
         builder: (context, state) => const RegisterView(),
       ),
-
-      // Dashboard routes
       GoRoute(
         path: '/home',
         name: 'home',
@@ -55,22 +52,23 @@ final routerProvider = Provider<GoRouter>((ref) {
       final isRegistering = authState is AuthStateRegistering;
       final location = state.matchedLocation;
 
-      // Kui registreerimine käib, ära suuna ümber
       if (isRegistering) {
         return null;
       }
 
-      // Authenticated kasutaja ei saa minna login/register lehele
+      // Authenticated kasutaja suunatakse home'i
       if (isAuthenticated) {
-        if (location == '/login' || location == '/register') {
+        if (location == '/welcome' || location == '/login' || location == '/register') {
           return '/home';
         }
         return null;
       }
 
-      // Mitte-authenticated kasutaja saab minna ainult login/register lehele
-      if (!isAuthenticated && location != '/register' && location != '/login') {
-        return '/login';
+      // Mitte-authenticated kasutaja saab olla welcome, login või register lehel
+      if (!isAuthenticated) {
+        if (location != '/welcome' && location != '/login' && location != '/register') {
+          return '/welcome';
+        }
       }
 
       return null;

@@ -7,7 +7,9 @@ import 'package:joby/features/auth/presentation/controllers/auth_controller.dart
 import 'package:joby/features/auth/presentation/controllers/auth_state.dart';
 import 'package:joby/features/auth/presentation/widgets/divider_with_margins.dart';
 import 'package:joby/features/auth/presentation/widgets/gradient_background.dart';
+import 'package:joby/theme/app_button_styles.dart';
 import 'package:joby/theme/app_colors.dart';
+import 'package:joby/theme/app_input_decorations.dart';
 import 'package:joby/theme/app_strings.dart';
 import 'package:pretty_animated_text/pretty_animated_text.dart';
 
@@ -69,11 +71,15 @@ class _LoginViewState extends ConsumerState<LoginView> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text(AppStrings.appTitle, style: GoogleFonts.bricolageGrotesque(
-              fontWeight: FontWeight.w500,
-              fontSize: 30,
-              color: Colors.white
-          )),
+          elevation: 0,
+          centerTitle: true,
+          toolbarHeight: 90,
+          leading: BackButton(color: Colors.white),
+          title: Image.asset(
+            'assets/images/jobY.png',
+            height: 90,
+            fit: BoxFit.contain,
+          ),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -86,7 +92,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     // Header
                     const SizedBox(height: 40),
                     OffsetText(
-                      text: 'Welcome to JobY',
+                      text: 'Login to Job.Y',
                       duration: const Duration(seconds: 4),
                       type: AnimationType.word,
                       slideType: SlideAnimationType.leftRight,
@@ -96,210 +102,44 @@ class _LoginViewState extends ConsumerState<LoginView> {
                           color: Colors.white
                       )),
                     ),
-                    const  DividerWithMargins(20),
-                    // Subheader
-                    Text(
-                      "Login into your account",
-                      style: Theme
-                          .of(context)
-                          .
-                      textTheme
-                          .
-                      bodyMedium
-                          ?.copyWith(height: 1.5
-                      ),
-                    ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _emailController,
-                      decoration: const InputDecoration(
-                        labelText: "Email",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                        ),
-                      ),
+                      style: const TextStyle(color: Colors.white),
+                      decoration: AppInputDecorations.authField(label: "Email"),
                       keyboardType: TextInputType.emailAddress,
                       validator: validateEmail,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _passwordController,
-                      decoration: const InputDecoration(
-                        labelText: "Password",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                      style: const TextStyle(color: Colors.white),
+                      decoration: AppInputDecorations.authField(
+                        label: "Password",
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                            color: Colors.white70,
+                          ),
+                          onPressed: () =>
+                              setState(() => _obscurePassword = !_obscurePassword),
                         ),
                       ),
                       obscureText: _obscurePassword,
                       validator: validatePassword,
                     ),
-                    const SizedBox(height: 16),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: AppColors.primaryColor,
-                        foregroundColor: AppColors.loginButtonTextColor,
-                      ),
+                    const SizedBox(height: 32),
+
+                    ElevatedButton(
+                      style: AppButtonStyles.primaryPillButtonStyle(),
                       onPressed: _attemptLogin,
                       child: const Text("Login"),
-                    ),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: AppColors.secondaryColor,
-                        foregroundColor: AppColors.loginButtonTextColor,
-                      ),
-                      onPressed: () {
-                        print("Register");
-                        context.push('/register');
-                      },
-                      child: const Text("Register", style: TextStyle(color: Colors.white),),
-                    ),
-                    const DividerWithMargins(20),
+                    )
                   ]
               ),
             ),
           ),
         ))
     );
-
-    // return Scaffold(
-    //   body: SafeArea(
-    //     child: Center(
-    //       child: SingleChildScrollView(
-    //         padding: const EdgeInsets.all(24.0),
-    //         child: Form(
-    //           key: _formKey,
-    //           child: Column(
-    //             mainAxisAlignment: MainAxisAlignment.center,
-    //             crossAxisAlignment: CrossAxisAlignment.stretch,
-    //             children: [
-    //               // Logo/Title
-    //               const Icon(
-    //                 Icons.lock_outline,
-    //                 size: 80,
-    //                 color: Colors.blue,
-    //               ),
-    //               const SizedBox(height: 16),
-    //               Text(
-    //                 'Welcome Back',
-    //                 style: Theme.of(context).textTheme.headlineMedium,
-    //                 textAlign: TextAlign.center,
-    //               ),
-    //               const SizedBox(height: 8),
-    //               Text(
-    //                 'Sign in to continue',
-    //                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-    //                       color: Colors.grey[600],
-    //                     ),
-    //                 textAlign: TextAlign.center,
-    //               ),
-    //               const SizedBox(height: 48),
-    //
-    //               // Email field
-    //               TextFormField(
-    //                 controller: _emailController,
-    //                 keyboardType: TextInputType.emailAddress,
-    //                 decoration: const InputDecoration(
-    //                   labelText: 'Email',
-    //                   hintText: 'Enter your email',
-    //                   prefixIcon: Icon(Icons.email_outlined),
-    //                   border: OutlineInputBorder(),
-    //                 ),
-    //                 validator: (value) {
-    //                   if (value == null || value.isEmpty) {
-    //                     return 'Please enter your email';
-    //                   }
-    //                   if (!value.contains('@')) {
-    //                     return 'Please enter a valid email';
-    //                   }
-    //                   return null;
-    //                 },
-    //               ),
-    //               const SizedBox(height: 16),
-    //
-    //               // Password field
-    //               TextFormField(
-    //                 controller: _passwordController,
-    //                 obscureText: _obscurePassword,
-    //                 decoration: InputDecoration(
-    //                   labelText: 'Password',
-    //                   hintText: 'Enter your password',
-    //                   prefixIcon: const Icon(Icons.lock_outlined),
-    //                   suffixIcon: IconButton(
-    //                     icon: Icon(
-    //                       _obscurePassword
-    //                           ? Icons.visibility_outlined
-    //                           : Icons.visibility_off_outlined,
-    //                     ),
-    //                     onPressed: () {
-    //                       setState(() {
-    //                         _obscurePassword = !_obscurePassword;
-    //                       });
-    //                     },
-    //                   ),
-    //                   border: const OutlineInputBorder(),
-    //                 ),
-    //                 validator: (value) {
-    //                   if (value == null || value.isEmpty) {
-    //                     return 'Please enter your password';
-    //                   }
-    //                   if (value.length < 6) {
-    //                     return 'Password must be at least 6 characters';
-    //                   }
-    //                   return null;
-    //                 },
-    //               ),
-    //               const SizedBox(height: 8),
-    //
-    //               // Forgot password
-    //               Align(
-    //                 alignment: Alignment.centerRight,
-    //                 child: TextButton(
-    //                   onPressed: () {
-    //                     // Navigate to forgot password screen
-    //                     Navigator.of(context).pushNamed('/forgot-password');
-    //                   },
-    //                   child: const Text('Forgot Password?'),
-    //                 ),
-    //               ),
-    //               const SizedBox(height: 24),
-    //
-    //               // Login button
-    //               authState.maybeWhen(
-    //                 loading: () => const Center(
-    //                   child: CircularProgressIndicator(),
-    //                 ),
-    //                 orElse: () => ElevatedButton(
-    //                   onPressed: _attemptLogin,
-    //                   style: ElevatedButton.styleFrom(
-    //                     padding: const EdgeInsets.symmetric(vertical: 16),
-    //                   ),
-    //                   child: const Text(
-    //                     'Login',
-    //                     style: TextStyle(fontSize: 16),
-    //                   ),
-    //                 ),
-    //               ),
-    //               const SizedBox(height: 16),
-    //
-    //               // Register link
-    //               Row(
-    //                 mainAxisAlignment: MainAxisAlignment.center,
-    //                 children: [
-    //                   const Text("Don't have an account?"),
-    //                   TextButton(
-    //                     onPressed: () {
-    //                       Navigator.of(context).pushNamed('/register');
-    //                     },
-    //                     child: const Text('Register'),
-    //                   ),
-    //                 ],
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 }

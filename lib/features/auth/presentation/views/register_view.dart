@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:joby/core/utils/validators/validators.dart';
 import 'package:joby/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:joby/features/auth/presentation/controllers/auth_state.dart';
 import 'package:joby/features/auth/presentation/widgets/divider_with_margins.dart';
+import 'package:joby/features/auth/presentation/widgets/gradient_background.dart';
 import 'package:joby/features/users/domain/use_cases/create_user_use_case.dart';
 import 'package:joby/features/users/presentation/controllers/user_controller.dart';
 import 'package:joby/features/users/presentation/providers/user_providers.dart';
 import 'package:joby/state/auth/providers/authentication_provider.dart';
+import 'package:joby/theme/app_button_styles.dart';
 import 'package:joby/theme/app_colors.dart';
+import 'package:joby/theme/app_input_decorations.dart';
 import 'package:joby/theme/app_strings.dart';
+import 'package:pretty_animated_text/pretty_animated_text.dart';
 
 class RegisterView extends ConsumerStatefulWidget {
   const RegisterView({super.key});
@@ -75,104 +80,117 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
       );
     });
 
-    return Scaffold(
-      appBar: AppBar(title: const Text(AppStrings.appTitle)),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Header
-                const SizedBox(height: 40),
-                Text(
-                  'Sing up',
-                  style: Theme.of(context).textTheme.displaySmall,
-                ),
-                const DividerWithMargins(20),
-                // Subheader
-                TextFormField(
-                  controller: _firstNameController,
-                  decoration: const InputDecoration(
-                    labelText: "First Name",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
+
+    return GradientBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          centerTitle: true,
+          toolbarHeight: 90,
+          leading: BackButton(color: Colors.white),
+          title: Image.asset(
+            'assets/images/jobY.png',
+            height: 90,
+            fit: BoxFit.contain,
+          ),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 24),
+                  const SizedBox(height: 40),
+                  OffsetText(
+                    text: 'Register to Job.Y',
+                    duration: const Duration(seconds: 4),
+                    type: AnimationType.word,
+                    slideType: SlideAnimationType.leftRight,
+                    textStyle: (GoogleFonts.pacifico(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 50,
+                        color: Colors.white
+                    )),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'It takes less than a minute.',
+                    style: TextStyle(color: Colors.white70),
+                  ),
+                  const SizedBox(height: 24),
+
+                  TextFormField(
+                    controller: _firstNameController,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: AppInputDecorations.authField(label: "First name"),
+                    validator: validateName,
+                  ),
+                  const SizedBox(height: 12),
+
+                  TextFormField(
+                    controller: _surNameController,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: AppInputDecorations.authField(label: "Surname"),
+                    validator: validateName,
+                  ),
+                  const SizedBox(height: 12),
+
+                  TextFormField(
+                    controller: _emailController,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: AppInputDecorations.authField(label: "Email"),
+                    validator: validateEmail,
+                  ),
+                  const SizedBox(height: 12),
+
+                  TextFormField(
+                    controller: _passwordController,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: AppInputDecorations.authField(label: "Password",
+                      suffixIcon: IconButton(
+                      icon: Icon(
+                      _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                      color: Colors.white70,
                     ),
+                    onPressed: () =>
+                        setState(() => _obscurePassword = !_obscurePassword),
+                  ),),
+                    obscureText: _obscurePassword,
+                    validator: validatePassword,
                   ),
-                  validator: validateName,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _surNameController,
-                  decoration: const InputDecoration(
-                    labelText: "Surname",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                    ),
+                  const SizedBox(height: 12),
+
+                  TextFormField(
+                    controller: _confirmPasswordController,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: AppInputDecorations.authField(label: "Confirm password",
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                          color: Colors.white70,
+                        ),
+                        onPressed: () =>
+                            setState(() => _obscurePassword = !_obscurePassword),
+                      ),),
+                    obscureText: _obscureConfirmPassword,
+                    validator: (v) => validateConfirmPassword(_passwordController.text, v),
                   ),
-                  validator: validateName,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: "Email",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                    ),
+
+                  const SizedBox(height: 20),
+
+                  ElevatedButton(
+                    style: AppButtonStyles.primaryPillButtonStyle(),
+                    onPressed: _attemptRegister,
+                    child: const Text("Create account"),
                   ),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: validateEmail,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(
-                    labelText: "Password",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                    ),
-                  ),
-                  obscureText: _obscurePassword,
-                  validator: validatePassword,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _confirmPasswordController,
-                  decoration: const InputDecoration(
-                    labelText: "Confirm Password",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                    ),
-                  ),
-                  obscureText: _obscureConfirmPassword,
-                  textInputAction: TextInputAction.done,
-                  validator: (value) {
-                    return validateConfirmPassword(
-                      _passwordController.text,
-                      value,
-                    );
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: AppColors.secondaryColor,
-                    foregroundColor: AppColors.loginButtonTextColor,
-                  ),
-                  onPressed: () {
-                    print("Register");
-                    _attemptRegister();
-                  },
-                  child: const Text(
-                    "Register",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                const DividerWithMargins(20),
-              ],
+
+                ],
+              ),
             ),
           ),
         ),

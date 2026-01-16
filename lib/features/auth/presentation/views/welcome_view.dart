@@ -55,24 +55,43 @@ class _WelcomeViewState extends State<WelcomeView> {
                   fit: BoxFit.contain,
                 ),
               ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: AppColors.primaryColor,
-                  foregroundColor: AppColors.loginButtonTextColor,
+              const SizedBox(height: 40),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: AppColors.primaryColor,
+                        foregroundColor: AppColors.loginButtonTextColor,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      onPressed: () => context.push('/login'),
+                      child: const Text("Login", style: TextStyle(
+                          color: Colors.white,fontSize: 18)),
+                    ),
+                    const SizedBox(height: 16),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: AppColors.secondaryColor,
+                        foregroundColor: AppColors.loginButtonTextColor,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      onPressed: () => context.push('/register'),
+                      child: const Text(
+                        "Register",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                    ),
+                  ],
                 ),
-                onPressed: context.push('/login'),
-                child: const Text("Login"),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: AppColors.secondaryColor,
-                  foregroundColor: AppColors.loginButtonTextColor,
-                ),
-                onPressed: () {
-                  print("Register");
-                  context.push('/register');
-                },
-                child: const Text("Register", style: TextStyle(color: Colors.white),),
               ),
             ],
           ),
