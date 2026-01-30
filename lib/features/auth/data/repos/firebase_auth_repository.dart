@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:joby/core/errors/exceptions.dart';
 import 'package:joby/features/auth/data/models/auth_user_model.dart';
 import 'package:joby/features/auth/domain/entities/auth_user_entity.dart';
@@ -8,15 +9,28 @@ import 'package:joby/features/auth/domain/repos/auth_repository.dart';
 /// Firebase implementation of AuthRepository
 class FirebaseAuthRepository implements AuthRepository {
   final FirebaseAuth _firebaseAuth;
+  final GoogleSignIn _googleSignIn;
+  bool _googleSignInInitialized = false;
 
-  FirebaseAuthRepository({FirebaseAuth? firebaseAuth})
-      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
+  FirebaseAuthRepository({
+    FirebaseAuth? firebaseAuth,
+    GoogleSignIn? googleSignIn,
+  })  : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
+        _googleSignIn = googleSignIn ?? GoogleSignIn.instance;
+
+  /// Initialize Google Sign-In
+  Future<void> _initializeGoogleSignIn() async {
+    if (_googleSignInInitialized) return;
+
+    await _googleSignIn.initialize();
+    _googleSignInInitialized = true;
+  }
 
   @override
   Future<Either<Exception, AuthUserEntity?>> getCurrentUser() async {
     try {
       final user = _firebaseAuth.currentUser;
-      
+
       if (user == null) {
         return const Right(null);
       }
@@ -63,6 +77,54 @@ class FirebaseAuthRepository implements AuthRepository {
   }
 
   @override
+  Future<Either<Exception, AuthUserEntity>> loginWithGoogle() async {
+    try {
+      await _initializeGoogleSignIn();
+
+      GoogleSignInAccount? googleUser =
+      await _googleSignIn.attemptLightweightAuthentication();
+
+      if (googleUser == null) {
+        if (_googleSignIn.supportsAuthenticate()) {
+          googleUser = await _googleSignIn.authenticate();
+        } else {
+          return Left(ValidationException('Google Sign-In not supported on this platform'));
+        }
+      }
+      if (googleUser == null) {
+        return Left(ValidationException('Google sign-in aborted by user'));
+      }
+
+
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+      final String? idToken = googleAuth.idToken;
+
+      if (idToken == null) {
+        return Left(ServerException('Failed to get ID token from Google'));
+      }
+
+
+      final credential = GoogleAuthProvider.credential(
+        idToken: idToken,
+      );
+
+      final userCredential =
+      await _firebaseAuth.signInWithCredential(credential);
+
+      if (userCredential.user == null) {
+        return Left(ServerException('Google login failed: No user returned'));
+      }
+
+      final authUser = AuthUserModel.fromFirebaseUser(userCredential.user!);
+      return Right(authUser);
+    } on FirebaseAuthException catch (e) {
+      return Left(_handleFirebaseAuthException(e));
+    } catch (e) {
+      return Left(ServerException('Google sign-in error: $e'));
+    }
+  }
+
+  @override
   Future<Either<Exception, AuthUserEntity>> register({
     required String email,
     required String password,
@@ -78,7 +140,6 @@ class FirebaseAuthRepository implements AuthRepository {
         return Left(ServerException('Registration failed: No user returned'));
       }
 
-      // Update display name if provided
       if (displayName != null) {
         await userCredential.user!.updateDisplayName(displayName);
         await userCredential.user!.reload();
@@ -97,6 +158,12 @@ class FirebaseAuthRepository implements AuthRepository {
   @override
   Future<Either<Exception, void>> logout() async {
     try {
+      try {
+        await _initializeGoogleSignIn();
+        await _googleSignIn.disconnect();
+      } catch (_) {
+      }
+
       await _firebaseAuth.signOut();
       return const Right(null);
     } on FirebaseAuthException catch (e) {
@@ -127,7 +194,7 @@ class FirebaseAuthRepository implements AuthRepository {
   }) async {
     try {
       final user = _firebaseAuth.currentUser;
-      
+
       if (user == null) {
         return Left(ValidationException('No user is currently signed in'));
       }
@@ -153,7 +220,7 @@ class FirebaseAuthRepository implements AuthRepository {
   Future<Either<Exception, void>> deleteAccount() async {
     try {
       final user = _firebaseAuth.currentUser;
-      
+
       if (user == null) {
         return Left(ValidationException('No user is currently signed in'));
       }
@@ -176,7 +243,7 @@ class FirebaseAuthRepository implements AuthRepository {
   Future<Either<Exception, void>> reloadUser() async {
     try {
       final user = _firebaseAuth.currentUser;
-      
+
       if (user == null) {
         return Left(ValidationException('No user is currently signed in'));
       }
@@ -211,6 +278,10 @@ class FirebaseAuthRepository implements AuthRepository {
         return ValidationException('Too many requests. Try again later');
       case 'network-request-failed':
         return ServerException('Network error. Check your connection');
+      case 'account-exists-with-different-credential':
+        return ValidationException(
+          'An account already exists with the same email but different sign-in credentials',
+        );
       default:
         return ServerException('Authentication error: ${e.message}');
     }

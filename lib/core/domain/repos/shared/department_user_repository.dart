@@ -6,7 +6,7 @@ import 'package:joby/core/utils/typedef/user_id.dart';
 import 'package:joby/core/utils/typedef/user_role_id.dart';
 import 'package:joby/features/users/domain/entities/user_entity.dart';
 
-/// Repository for DepartmentUser (user membership in departments)
+/// Repository for DepartmentUser
 abstract class DepartmentUserRepository {
   Future<Either<Exception, DepartmentUserEntity>> getDepartmentUserById(DepartmentUserId id);
   Future<Either<Exception, List<DepartmentUserEntity>>> getAllDepartmentUsers();

@@ -38,10 +38,8 @@ class _DepartmentDetailViewState extends ConsumerState<DepartmentDetailView> {
 
     final hierarchyController = ref.read(departmentHierarchyControllerProvider.notifier);
 
-    // Load children
     final children = await hierarchyController.getChildDepartments(widget.departmentId);
     
-    // Load parent
     final parent = await hierarchyController.getParentDepartment(widget.departmentId);
 
     if (mounted) {
@@ -57,7 +55,6 @@ class _DepartmentDetailViewState extends ConsumerState<DepartmentDetailView> {
   Widget build(BuildContext context) {
     final departmentState = ref.watch(departmentControllerProvider);
 
-    // Listen for hierarchy changes to reload
     ref.listen<DepartmentHierarchyState>(
       departmentHierarchyControllerProvider,
       (previous, next) {
@@ -283,7 +280,6 @@ class _DepartmentDetailViewState extends ConsumerState<DepartmentDetailView> {
           ),
           const SizedBox(height: 24),
 
-          // Child Departments section
           Text(
             'Child Departments',
             style: Theme.of(context).textTheme.titleMedium,
@@ -378,7 +374,6 @@ class _DepartmentDetailViewState extends ConsumerState<DepartmentDetailView> {
       context: context,
       builder: (context) => AddChildDepartmentDialog(parentDepartment: department),
     ).then((result) {
-      // Reload hierarchy info after dialog closes
       if (result == true) {
         _loadHierarchyInfo();
       }

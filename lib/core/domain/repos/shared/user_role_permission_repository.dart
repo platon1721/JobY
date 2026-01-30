@@ -7,8 +7,6 @@ import 'package:joby/core/utils/typedef/user_role_permission_id.dart';
 import 'package:joby/features/permissions/domain/entities/permission_entity.dart';
 import 'package:joby/features/permissions/domain/entities/user_role_entity.dart';
 
-/// Abstract repository for UserRolePermission operations
-/// Junction table: manages relationships between roles and permissions
 abstract class UserRolePermissionRepository {
   /// Get all role-permission assignments
   Future<Either<Exception, List<UserRolePermissionEntity>>> getAllRolePermissions();

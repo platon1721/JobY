@@ -3,7 +3,6 @@ import 'package:joby/core/utils/typedef/department_type_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 import 'package:joby/features/departments/domain/entities/department_type_entity.dart';
 
-/// Model for DepartmentType with Firebase support
 class DepartmentTypeModel extends DepartmentTypeEntity {
   const DepartmentTypeModel({
     required super.id,
@@ -14,7 +13,6 @@ class DepartmentTypeModel extends DepartmentTypeEntity {
     super.activeTill,
   });
 
-  /// Create DepartmentTypeModel from Firebase DocumentSnapshot
   factory DepartmentTypeModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
 
@@ -30,7 +28,6 @@ class DepartmentTypeModel extends DepartmentTypeEntity {
     );
   }
 
-  /// Create DepartmentTypeModel from Map
   factory DepartmentTypeModel.fromMap(Map<String, dynamic> map, String id) {
     return DepartmentTypeModel(
       id: id,
@@ -44,7 +41,6 @@ class DepartmentTypeModel extends DepartmentTypeEntity {
     );
   }
 
-  /// Convert to Firestore Map
   Map<String, dynamic> toFirestore() {
     return {
       'name': name,
@@ -55,7 +51,6 @@ class DepartmentTypeModel extends DepartmentTypeEntity {
     };
   }
 
-  /// Create DepartmentTypeModel from Entity
   factory DepartmentTypeModel.fromEntity(DepartmentTypeEntity entity) {
     return DepartmentTypeModel(
       id: entity.id,
@@ -67,7 +62,6 @@ class DepartmentTypeModel extends DepartmentTypeEntity {
     );
   }
 
-  /// Copy with new values
   @override
   DepartmentTypeModel copyWith({
     DepartmentTypeId? id,

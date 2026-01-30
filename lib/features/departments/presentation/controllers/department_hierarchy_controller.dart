@@ -9,7 +9,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'department_hierarchy_controller.g.dart';
 
-/// Controller for managing department hierarchy (parent-child relationships)
 @riverpod
 class DepartmentHierarchyController extends _$DepartmentHierarchyController {
   DepartmentInDepartmentRepository get _repository =>
@@ -20,12 +19,10 @@ class DepartmentHierarchyController extends _$DepartmentHierarchyController {
     return const DepartmentHierarchyState.initial();
   }
 
-  /// Load the full department hierarchy tree
   Future<void> loadHierarchy() async {
     state = const DepartmentHierarchyState.loading();
 
     try {
-      // Get root departments (those without parents)
       final rootsResult = await _repository.getRootDepartments();
 
       if (rootsResult.isLeft()) {
@@ -37,7 +34,6 @@ class DepartmentHierarchyController extends _$DepartmentHierarchyController {
 
       final roots = rootsResult.fold((l) => <DepartmentEntity>[], (r) => r);
 
-      // Build children map for each root
       final childrenMap = <String, List<DepartmentEntity>>{};
 
       for (final root in roots) {

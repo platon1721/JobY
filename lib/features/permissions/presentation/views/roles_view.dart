@@ -26,7 +26,6 @@ class _RolesViewState extends ConsumerState<RolesView> {
   Widget build(BuildContext context) {
     final roleState = ref.watch(roleControllerProvider);
 
-    // Kuula state muutusi success/error jaoks
     ref.listen<RoleState>(roleControllerProvider, (previous, next) {
       next.maybeWhen(
         success: (message) {

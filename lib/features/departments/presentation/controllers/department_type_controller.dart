@@ -13,7 +13,6 @@ class DepartmentTypeController extends _$DepartmentTypeController {
     return const DepartmentTypeState.initial();
   }
 
-  /// Laadi kõik department tüübid
   Future<void> loadAllDepartmentTypes() async {
     state = const DepartmentTypeState.loading();
 
@@ -30,7 +29,6 @@ class DepartmentTypeController extends _$DepartmentTypeController {
     }
   }
 
-  /// Loo uus department tüüp
   Future<bool> createDepartmentType({
     required String name,
     String? description,

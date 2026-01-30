@@ -6,8 +6,6 @@ import 'package:joby/core/utils/typedef/user_user_role_id.dart';
 import 'package:joby/features/permissions/domain/entities/user_role_entity.dart';
 import 'package:joby/features/users/domain/entities/user_entity.dart';
 
-/// Abstract repository for UserUserRole operations
-/// Junction table: manages relationships between users and roles
 abstract class UserUserRoleRepository {
   /// Get all user-role assignments
   Future<Either<Exception, List<UserUserRoleEntity>>> getAllUserRoles();
@@ -34,7 +32,7 @@ abstract class UserUserRoleRepository {
     required UserId createdBy,
   });
 
-  /// Remove role from user (set activeTill)
+  /// Remove role from user
   Future<Either<Exception, void>> removeRoleFromUser({
     required UserId userId,
     required UserRoleId roleId,

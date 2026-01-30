@@ -5,7 +5,6 @@ import 'package:joby/core/domain/use_cases/common/use_case.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 import 'package:joby/features/permissions/domain/entities/user_role_entity.dart';
 
-/// Use case for getting all roles assigned to a user
 class GetUserRolesUseCase extends UseCase<List<UserRoleEntity>, GetUserRolesParams> {
   final UserUserRoleRepository repository;
 
@@ -17,7 +16,6 @@ class GetUserRolesUseCase extends UseCase<List<UserRoleEntity>, GetUserRolesPara
   }
 }
 
-/// Parameters for GetUserRolesUseCase
 class GetUserRolesParams extends Equatable {
   final UserId userId;
 

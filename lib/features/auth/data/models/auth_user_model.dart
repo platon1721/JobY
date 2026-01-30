@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:joby/features/auth/domain/entities/auth_user_entity.dart';
 
-/// Model for AuthUser with Firebase Auth support
 class AuthUserModel extends AuthUserEntity {
   const AuthUserModel({
     required super.uid,
@@ -12,7 +11,6 @@ class AuthUserModel extends AuthUserEntity {
     super.createdAt,
   });
 
-  /// Create AuthUserModel from Firebase User
   factory AuthUserModel.fromFirebaseUser(firebase_auth.User user) {
     return AuthUserModel(
       uid: user.uid,

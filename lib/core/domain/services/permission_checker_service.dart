@@ -5,8 +5,6 @@ import 'package:joby/core/domain/repos/shared/user_user_role_repository.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 import 'package:joby/features/permissions/domain/repos/permission_repository.dart';
 
-/// Domain service for permision checking logic
-/// This service orchestrates multiple repositories to check permissions
 class PermissionCheckerService {
   final UserUserRoleRepository _userUserRoleRepository;
   final UserRolePermissionRepository _userRolePermissionRepository;
@@ -20,12 +18,6 @@ class PermissionCheckerService {
         _userRolePermissionRepository = userRolePermissionRepository,
         _permissionRepository = permissionRepository;
 
-  /// Get all permissions for a user (aggregated from all their roles)
-  /// 
-  /// Steps:
-  /// 1. Get all active roles for user (from UserUserRoleRepository)
-  /// 2. Get all permissions for those roles (from UserRolePermissionRepository)
-  /// 3. Convert to Permission enum set
   Future<Either<Exception, Set<Permission>>> getUserPermissions(
     UserId userId,
   ) async {
@@ -66,7 +58,6 @@ class PermissionCheckerService {
     }
   }
 
-  /// Check if user has a specific permission
   Future<Either<Exception, bool>> userHasPermission({
     required UserId userId,
     required Permission permission,
@@ -111,8 +102,7 @@ class PermissionCheckerService {
     );
   }
 
-  /// Check if user can perform action (convenience method)
-  /// Same as userHasPermission but with better naming for use cases
+
   Future<Either<Exception, bool>> canUserPerformAction({
     required UserId userId,
     required Permission requiredPermission,

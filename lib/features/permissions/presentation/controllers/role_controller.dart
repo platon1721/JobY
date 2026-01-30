@@ -6,7 +6,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'role_controller.g.dart';
 
-/// RoleController - haldab rollide olekut ja operatsioone
 @riverpod
 class RoleController extends _$RoleController {
   @override
@@ -14,7 +13,6 @@ class RoleController extends _$RoleController {
     return const RoleState.initial();
   }
 
-  /// Laadi kõik rollid
   Future<void> loadAllRoles() async {
     state = const RoleState.loading();
 
@@ -27,11 +25,10 @@ class RoleController extends _$RoleController {
         (roles) => state = RoleState.loaded(roles),
       );
     } catch (e) {
-      state = RoleState.error('Rollide laadimine ebaõnnestus: $e');
+      state = RoleState.error('Error: $e');
     }
   }
 
-  /// Laadi roll ID järgi koos õigustega
   Future<void> loadRoleById(String roleId) async {
     state = const RoleState.loading();
 
@@ -44,7 +41,6 @@ class RoleController extends _$RoleController {
       await roleResult.fold(
         (error) async => state = RoleState.error(error.toString()),
         (role) async {
-          // Laadi ka õigused
           final permissionsResult = await permissionRepository.getAllPermissions();
           
           permissionsResult.fold(
@@ -57,11 +53,10 @@ class RoleController extends _$RoleController {
         },
       );
     } catch (e) {
-      state = RoleState.error('Rolli laadimine ebaõnnestus: $e');
+      state = RoleState.error('error: $e');
     }
   }
 
-  /// Loo uus roll
   Future<bool> createRole({
     required String name,
     required String description,
@@ -71,7 +66,6 @@ class RoleController extends _$RoleController {
     try {
       final roleRepository = ref.read(userRoleRepositoryProvider);
       
-      // Võta kasutaja ID auth staatusest
       final authState = ref.read(authControllerProvider);
       String? userId;
       if (authState is AuthStateAuthenticated) {
@@ -79,7 +73,7 @@ class RoleController extends _$RoleController {
       }
 
       if (userId == null) {
-        state = const RoleState.error('Kasutaja pole autentitud');
+        state = const RoleState.error('Error');
         return false;
       }
 
@@ -95,8 +89,7 @@ class RoleController extends _$RoleController {
           return false;
         },
         (role) {
-          state = const RoleState.success('Roll edukalt loodud');
-          // Laadi uuesti nimekiri
+          state = const RoleState.success('Nice');
           Future.delayed(const Duration(milliseconds: 500), () {
             loadAllRoles();
           });
@@ -104,12 +97,11 @@ class RoleController extends _$RoleController {
         },
       );
     } catch (e) {
-      state = RoleState.error('Rolli loomine ebaõnnestus: $e');
+      state = RoleState.error('Errors: $e');
       return false;
     }
   }
 
-  /// Puhasta viga olek
   void clearError() {
     if (state is RoleStateError) {
       state = const RoleState.initial();

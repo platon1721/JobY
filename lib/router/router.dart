@@ -26,7 +26,6 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: '/welcome',
     refreshListenable: authNotifier,
     routes: [
-      // Auth routes
       GoRoute(
         path: '/welcome',
         name: 'welcome',
@@ -43,7 +42,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const RegisterView(),
       ),
 
-      // Main app routes
       GoRoute(
         path: '/home',
         name: 'home',
@@ -55,7 +53,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const ProfileView(),
       ),
 
-      // Department routes
       GoRoute(
         path: '/departments',
         name: 'departments',
@@ -70,21 +67,18 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
 
-      // Department Hierarchy route
       GoRoute(
         path: '/department-hierarchy',
         name: 'department-hierarchy',
         builder: (context, state) => const DepartmentHierarchyView(),
       ),
 
-      // Department Types route
       GoRoute(
         path: '/department-types',
         name: 'department-types',
         builder: (context, state) => const DepartmentTypesView(),
       ),
 
-      // Role/Permission routes
       GoRoute(
         path: '/roles',
         name: 'roles',
@@ -109,7 +103,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         return null;
       }
 
-      // Authenticated kasutaja suunatakse home'i
       if (isAuthenticated) {
         if (location == '/welcome' || location == '/login' || location == '/register') {
           return '/home';
@@ -117,7 +110,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         return null;
       }
 
-      // Mitte-authenticated kasutaja saab olla welcome, login või register lehel
       if (!isAuthenticated) {
         if (location != '/welcome' && location != '/login' && location != '/register') {
           return '/welcome';

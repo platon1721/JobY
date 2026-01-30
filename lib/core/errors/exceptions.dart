@@ -1,4 +1,3 @@
-/// Data Layer exceptions
 library;
 
 
@@ -40,7 +39,6 @@ class PermissionException implements Exception {
 }
 
 /// Other exception
-/// Not found exception
 class NotFoundException implements Exception {
   final String message;
   NotFoundException(this.message);

@@ -49,7 +49,6 @@ class _CreateDepartmentDialogState extends ConsumerState<CreateDepartmentDialog>
           setState(() {
             _departmentTypes = types;
             _isLoadingTypes = false;
-            // Vali esimene tüüp vaikimisi kui on olemas
             if (types.isNotEmpty) {
               _selectedType = types.first;
             }
@@ -219,7 +218,6 @@ class _CreateDepartmentDialogState extends ConsumerState<CreateDepartmentDialog>
 
                 const SizedBox(height: 16),
 
-                // Hierarchy Level
                 DropdownButtonFormField<int>(
                   value: _selectedLevel,
                   decoration: const InputDecoration(

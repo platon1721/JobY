@@ -46,15 +46,12 @@ class _LoginViewState extends ConsumerState<LoginView> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authControllerProvider);
 
-    // Listen to auth state changes
     ref.listen<AuthState>(authControllerProvider, (previous, next) {
       next.maybeWhen(
         authenticated: (user) {
-          // Navigate to home screen
           context.go('/home');
         },
         error: (message) {
-          // Show error dialog
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(message),

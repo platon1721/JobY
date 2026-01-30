@@ -6,10 +6,6 @@ import 'package:joby/core/domain/use_cases/common/use_case.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 import 'package:joby/core/utils/typedef/user_role_id.dart';
 
-/// Use case for assigning a role to a user
-/// 
-/// This creates a relationship between a user and a role,
-/// granting the user all permissions associated with that role.
 class AssignRoleToUserUseCase extends UseCase<UserUserRoleEntity, AssignRoleToUserParams> {
   final UserUserRoleRepository repository;
 
@@ -25,7 +21,6 @@ class AssignRoleToUserUseCase extends UseCase<UserUserRoleEntity, AssignRoleToUs
   }
 }
 
-/// Parameters for AssignRoleToUserUseCase
 class AssignRoleToUserParams extends Equatable {
   final UserId userId;
   final UserRoleId roleId;

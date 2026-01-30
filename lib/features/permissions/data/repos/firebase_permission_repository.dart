@@ -89,8 +89,6 @@ class FirebasePermissionRepository implements PermissionRepository {
     String category,
   ) async {
     try {
-      // Get all permissions and filter by category prefix
-      // e.g., category "user" matches "user.create", "user.read", etc.
       final snapshot = await _collection
           .where('active_till', isNull: true)
           .get();

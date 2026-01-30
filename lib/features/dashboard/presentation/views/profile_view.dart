@@ -70,7 +70,6 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
   Widget build(BuildContext context) {
     final userState = ref.watch(userControllerProvider);
 
-    // Kuula state muutusi success/error jaoks
     ref.listen<UserState>(userControllerProvider, (previous, next) {
       next.maybeWhen(
         success: (message) {
@@ -90,7 +89,6 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
           );
         },
         loaded: (user) {
-          // Uuenda väljad kui andmed laetakse
           if (!_isEditing) {
             _populateFields(next);
           }
@@ -99,7 +97,6 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
       );
     });
 
-    // Täida väljad esimesel laadimisel
     if (!_isEditing) {
       _populateFields(userState);
     }
@@ -191,7 +188,6 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                 ),
                 const SizedBox(height: 32),
 
-                // Form fields
                 Text(
                   'Personal Information',
                   style: Theme.of(context).textTheme.titleMedium,
@@ -278,7 +274,6 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                     ),
                   ),
 
-                // Account info (read only)
                 if (!_isEditing) ...[
                   const SizedBox(height: 16),
                   Text(

@@ -40,7 +40,6 @@ class DepartmentTypeEntity extends Equatable with Auditable {
   @override
   String toString() => 'DepartmentTypeEntity(id: $id, name: $name)';
 
-  /// Create a copy with updated fields
   DepartmentTypeEntity copyWith({
     DepartmentTypeId? id,
     String? name,
@@ -59,10 +58,8 @@ class DepartmentTypeEntity extends Equatable with Auditable {
     );
   }
 
-  /// Check for active status
   bool get isActive => activeTill == null || activeTill!.isAfter(DateTime.now());
 
-  /// Deactivate this relationship
   DepartmentTypeEntity deactivate() {
     return copyWith(activeTill: DateTime.now());
   }

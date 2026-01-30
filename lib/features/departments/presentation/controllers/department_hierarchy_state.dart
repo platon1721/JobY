@@ -8,7 +8,6 @@ class DepartmentHierarchyState with _$DepartmentHierarchyState {
   const factory DepartmentHierarchyState.initial() = DepartmentHierarchyStateInitial;
   const factory DepartmentHierarchyState.loading() = DepartmentHierarchyStateLoading;
   
-  /// Loaded state with hierarchy tree data
   const factory DepartmentHierarchyState.loaded({
     required List<DepartmentEntity> rootDepartments,
     required Map<String, List<DepartmentEntity>> childrenMap,

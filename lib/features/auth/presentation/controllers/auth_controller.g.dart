@@ -44,7 +44,7 @@ final class AuthControllerProvider
   }
 }
 
-String _$authControllerHash() => r'0bae16c004bb99ae83dfdc126619ae1c4625ee14';
+String _$authControllerHash() => r'7e68f61f54d383421e2d426ab40607849f4495d9';
 
 /// Auth controller managing authentication state
 

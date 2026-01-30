@@ -15,11 +15,6 @@ import 'package:joby/core/domain/services/permission_checker_service.dart';
 
 part 'shared_repositories_provider.g.dart';
 
-// ============================================================================
-// JUNCTION TABLE REPOSITORIES (Shared/Cross-cutting)
-// ============================================================================
-
-/// UserUserRole repository (User ↔ Role relationship)
 @riverpod
 UserUserRoleRepository userUserRoleRepository(Ref ref) {
   return FirebaseUserUserRoleRepository(
@@ -27,7 +22,6 @@ UserUserRoleRepository userUserRoleRepository(Ref ref) {
   );
 }
 
-/// UserRolePermission repository (Role ↔ Permission relationship)
 @riverpod
 UserRolePermissionRepository userRolePermissionRepository(Ref ref) {
   return FirebaseUserRolePermissionRepository(
@@ -35,7 +29,6 @@ UserRolePermissionRepository userRolePermissionRepository(Ref ref) {
   );
 }
 
-/// DepartmentInDepartment repository (Department hierarchy)
 @riverpod
 DepartmentInDepartmentRepository departmentInDepartmentRepository(Ref ref) {
   return FirebaseDepartmentInDepartmentRepository(
@@ -43,7 +36,6 @@ DepartmentInDepartmentRepository departmentInDepartmentRepository(Ref ref) {
   );
 }
 
-/// DepartmentUser repository (Department ↔ User relationship)
 @riverpod
 DepartmentUserRepository departmentUserRepository(Ref ref) {
   return FirebaseDepartmentUserRepository(
@@ -51,7 +43,6 @@ DepartmentUserRepository departmentUserRepository(Ref ref) {
   );
 }
 
-/// DepartmentTypeInType repository (Type hierarchy rules)
 @riverpod
 DepartmentTypeInTypeRepository departmentTypeInTypeRepository(Ref ref) {
   return FirebaseDepartmentTypeInTypeRepository(
@@ -59,16 +50,8 @@ DepartmentTypeInTypeRepository departmentTypeInTypeRepository(Ref ref) {
   );
 }
 
-// ============================================================================
-// SHARED SERVICES
-// ============================================================================
-
-/// Permission checker service
-/// Requires UserUserRole, UserRolePermission, and Permission repositories
 @riverpod
 PermissionCheckerService permissionCheckerService(Ref ref) {
-  // Note: PermissionRepository comes from permissions feature
-  // This will be added when we create permissions feature providers
   return PermissionCheckerService(
     userUserRoleRepository: ref.watch(userUserRoleRepositoryProvider),
     userRolePermissionRepository: ref.watch(userRolePermissionRepositoryProvider),

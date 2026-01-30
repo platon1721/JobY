@@ -5,7 +5,7 @@ import 'package:joby/core/utils/typedef/department_type_in_type_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 import 'package:joby/features/departments/domain/entities/department_type_entity.dart';
 
-/// Repository for DepartmentTypeInType (type hierarchy rules)
+/// Repository for DepartmentTypeInType
 abstract class DepartmentTypeInTypeRepository {
   /// Get relationship by ID
   Future<Either<Exception, DepartmentTypeInTypeEntity>> getRelationshipById(

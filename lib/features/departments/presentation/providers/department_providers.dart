@@ -10,10 +10,6 @@ import 'package:joby/features/departments/domain/use_cases/get_department_by_id_
 
 part 'department_providers.g.dart';
 
-// ============================================================================
-// REPOSITORIES
-// ============================================================================
-
 /// Department repository - Firebase teostus
 @riverpod
 DepartmentRepository departmentRepository(Ref ref) {
@@ -22,31 +18,22 @@ DepartmentRepository departmentRepository(Ref ref) {
   );
 }
 
-/// Department type repository - Firebase teostus
 @riverpod
 DepartmentTypeRepository departmentTypeRepository(Ref ref) {
   return FirebaseDepartmentTypeRepository(
     firestore: ref.watch(firebaseFirestoreProvider),
   );
 }
-
-// ============================================================================
-// USE CASES
-// ============================================================================
-
-/// Get all departments use case
 @riverpod
 GetAllDepartmentsUseCase getAllDepartmentsUseCase(Ref ref) {
   return GetAllDepartmentsUseCase(ref.watch(departmentRepositoryProvider));
 }
 
-/// Get department by ID use case
 @riverpod
 GetDepartmentByIdUseCase getDepartmentByIdUseCase(Ref ref) {
   return GetDepartmentByIdUseCase(ref.watch(departmentRepositoryProvider));
 }
 
-/// Create department use case
 @riverpod
 CreateDepartmentUseCase createDepartmentUseCase(Ref ref) {
   return CreateDepartmentUseCase(ref.watch(departmentRepositoryProvider));

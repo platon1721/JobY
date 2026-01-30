@@ -26,13 +26,6 @@ enum Permission {
   departmentTypeUpdate('department_type.update', 'Update department types'),
   departmentTypeDelete('department_type.delete', 'Delete department types'),
 
-  // Inventory permissions (example - add as needed)
-  inventoryCreate('inventory.create', 'Create inventory items'),
-  inventoryRead('inventory.read', 'View inventory items'),
-  inventoryUpdate('inventory.update', 'Update inventory items'),
-  inventoryDelete('inventory.delete', 'Delete inventory items'),
-  inventoryCheck('inventory.check', 'Perform inventory checks'),
-
   // Report permissions
   reportGenerate('report.generate', 'Generate reports'),
   reportView('report.view', 'View reports'),

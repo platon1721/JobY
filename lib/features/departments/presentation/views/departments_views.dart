@@ -26,6 +26,7 @@ class _DepartmentsViewState extends ConsumerState<DepartmentsView> {
   Widget build(BuildContext context) {
     final departmentState = ref.watch(departmentControllerProvider);
 
+
     ref.listen<DepartmentState>(departmentControllerProvider, (previous, next) {
       next.maybeWhen(
         success: (message) {
@@ -108,7 +109,6 @@ class _DepartmentsViewState extends ConsumerState<DepartmentsView> {
       );
     }
 
-    // Grupeeri hierarhia taseme järgi
     final groupedDepartments = <int, List<DepartmentEntity>>{};
     for (final dept in departments) {
       groupedDepartments.putIfAbsent(dept.hierarchyLevel, () => []).add(dept);

@@ -5,9 +5,6 @@ import 'package:joby/core/utils/typedef/department_in_department_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 import 'package:joby/features/departments/domain/entities/department_entity.dart';
 
-/// Abstract repository for DepartmentInDepartment operations
-/// Junction table managing hierarchical relationships between departments
-/// This replaces the old parentId approach in Department entity
 abstract class DepartmentInDepartmentRepository {
   /// Get relationship by ID
   Future<Either<Exception, DepartmentInDepartmentEntity>> getRelationshipById(
@@ -40,21 +37,17 @@ abstract class DepartmentInDepartmentRepository {
     DepartmentId childId,
   );
 
-  /// Get all descendants (recursive) of a department as flat list
-  /// Returns all children, grandchildren, etc.
+  /// Get all descendants of a department as flat list
   Future<Either<Exception, List<DepartmentEntity>>> getAllDescendants(
     DepartmentId parentId,
   );
 
   /// Get ancestry path from root to specific department
-  /// Returns list of departments from root to target (inclusive)
-  /// Example: [Company, Division, Department, Team]
   Future<Either<Exception, List<DepartmentEntity>>> getAncestryPath(
     DepartmentId departmentId,
   );
 
   /// Create new parent-child relationship
-  /// This establishes department hierarchy
   Future<Either<Exception, DepartmentInDepartmentEntity>>
       createRelationship({
     required DepartmentId parentId,
@@ -63,7 +56,6 @@ abstract class DepartmentInDepartmentRepository {
   });
 
   /// Move department to new parent
-  /// Removes old parent relationship and creates new one
   Future<Either<Exception, void>> moveDepartment({
     required DepartmentId departmentId,
     required DepartmentId newParentId,
@@ -83,14 +75,12 @@ abstract class DepartmentInDepartmentRepository {
   Future<Either<Exception, bool>> hasParent(DepartmentId departmentId);
 
   /// Check if creating this relationship would create a circular reference
-  /// Example: A is parent of B, B is parent of C, trying to make C parent of A
   Future<Either<Exception, bool>> wouldCreateCircularReference({
     required DepartmentId parentId,
     required DepartmentId childId,
   });
 
   /// Validate that a department can be moved to a new parent
-  /// Checks for circular references and type compatibility
   Future<Either<Exception, bool>> canMoveDepartment({
     required DepartmentId departmentId,
     required DepartmentId newParentId,
@@ -103,7 +93,6 @@ abstract class DepartmentInDepartmentRepository {
   Future<Either<Exception, int>> getDepartmentDepth(DepartmentId departmentId);
 
   /// Deactivate all relationships for a department (when department is deleted)
-  /// Includes both parent and child relationships
   Future<Either<Exception, void>> deactivateAllRelationships({
     required DepartmentId departmentId,
     required DateTime deactivationDate,

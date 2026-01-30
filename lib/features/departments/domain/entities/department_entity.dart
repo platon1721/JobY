@@ -4,7 +4,6 @@ import 'package:joby/core/utils/typedef/department_id.dart';
 import 'package:joby/core/utils/typedef/department_type_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 
-/// Domain entity for department
 class DepartmentEntity extends Equatable with Auditable {
   final DepartmentId id;
   final String name;
@@ -34,12 +33,6 @@ class DepartmentEntity extends Equatable with Auditable {
 
 
   ///TODO: Check if can be deleted
-  // bool canBeDeleted() {
-  //   // Root department cannot be deleted
-  //   if (isRootDepartment) return false;
-  //   // Inactive departments can be deleted
-  //   return activeTill != null;
-  // }
 
   @override
   List<Object?> get props => [

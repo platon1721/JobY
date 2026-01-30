@@ -12,23 +12,18 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'user_controller.g.dart';
 
-/// UserController - haldab kasutaja olekut ja operatsioone
 @riverpod
 class UserController extends _$UserController {
   @override
   UserState build() {
-    // Algne olek
     return const UserState.initial();
   }
 
-  /// Laadi praeguse kasutaja andmed
-  /// Auth konteksti UID abil
   Future<void> loadCurrentUser() async {
     state = const UserState.loading();
 
     try {
       final getUserByIdUseCase = ref.read(getUserByIdUseCaseProvider);
-      // Saame kasutaja UID auth kontrollerist
       final authState = ref.read(authControllerProvider);
 
       final userId = authState.maybeWhen(
@@ -41,7 +36,6 @@ class UserController extends _$UserController {
         return;
       }
 
-      // Laadi kasutaja andmed
       final result = await getUserByIdUseCase(
         GetUserByIdParams(userId: userId),
       );
@@ -55,7 +49,6 @@ class UserController extends _$UserController {
     }
   }
 
-  /// Update user profile
   Future<void> updateUserProfile({
     required String? firstName,
     required String? surName,
@@ -67,7 +60,6 @@ class UserController extends _$UserController {
     try {
       final updateUserUseCase = ref.read(updateUserUseCaseProvider);
 
-      // Get uid from auth state
       final authState = ref.read(authControllerProvider);
 
       final userId = authState.maybeWhen(
@@ -80,7 +72,6 @@ class UserController extends _$UserController {
         return;
       }
 
-      //
       final result = await updateUserUseCase(
         UpdateUserParams(
           userId: userId,
@@ -101,11 +92,10 @@ class UserController extends _$UserController {
         },
       );
     } catch (e) {
-      state = UserState.error('Profile updating error: $e');
+      state = UserState.error('Error: $e');
     }
   }
 
-  /// Laadi kasutaja andmed konkreetse ID järgi
   Future<void> getUserById(String userId) async {
     state = const UserState.loading();
 
@@ -121,7 +111,7 @@ class UserController extends _$UserController {
             (user) => state = UserState.loaded(user),
       );
     } catch (e) {
-      state = UserState.error('Viga kasutaja laadmisel: $e');
+      state = UserState.error('Error: $e');
     }
   }
 
@@ -160,12 +150,11 @@ class UserController extends _$UserController {
         },
       );
     } catch (e) {
-      state = UserState.error('Kasutaja loomine ebaõnnestus: $e');
+      state = UserState.error('Error: $e');
       return false;
     }
   }
 
-  /// Puhasta viga olek
   void clearError() {
     if (state is UserStateError) {
       state = const UserState.initial();

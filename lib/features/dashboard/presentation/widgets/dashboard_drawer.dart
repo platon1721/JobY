@@ -1,5 +1,3 @@
-// dashboard_drawer.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -37,70 +35,61 @@ class _DashboardDrawerState extends ConsumerState<DashboardDrawer> {
         child: SafeArea(
           child: Column(
             children: [
-              // Kui SidebarHeader on sul praegu “valge”/default,
-              // soovitan sinna ka valge tekst + läbipaistev bg panna.
               SidebarHeader(userState: userState),
 
               const SizedBox(height: 10),
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.14),
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(color: Colors.white.withOpacity(0.20)),
-                  ),
-                  child: SideMenu(
-                    menuItems: [
-                      SideMenuItem(
-                        icon: Icons.dashboard,
-                        title: 'Dashboard',
-                        onTap: () {
-                          Navigator.pop(context);
-                          context.go('/home');
-                        },
-                      ),
-                      SideMenuItem(
-                        icon: Icons.person,
-                        title: 'My Profile',
-                        onTap: () {
-                          Navigator.pop(context);
-                          context.push('/profile');
-                        },
-                      ),
-                      const SideMenuItem.divider(),
-                      SideMenuItem(
-                        icon: Icons.settings,
-                        title: 'Settings',
-                        onTap: () => Navigator.pop(context),
-                      ),
-                      SideMenuItem(
-                        icon: Icons.business,
-                        title: 'Departments',
-                        onTap: () {
-                          Navigator.pop(context);
-                          context.push('/departments');
-                        },
-                      ),
+                child: SideMenu(
+                  menuItems: [
                     SideMenuItem(
-                        icon: Icons.category,
-                        title: 'Department Types',
-                        onTap: () {
-                          Navigator.pop(context);
-                          context.push('/department-types');
-                          },
+                      icon: Icons.dashboard,
+                      title: 'Dashboard',
+                      onTap: () {
+                        Navigator.pop(context);
+                        context.go('/home');
+                      },
                     ),
-                      SideMenuItem(
-                        icon: Icons.security,
-                        title: 'Roles & Permissions',
-                        onTap: () {
-                          Navigator.pop(context);
-                          context.push('/roles');
-                        },
-                      ),
-                    ],
-                  ),
+                    SideMenuItem(
+                      icon: Icons.person,
+                      title: 'My Profile',
+                      onTap: () {
+                        Navigator.pop(context);
+                        context.push('/profile');
+                      },
+                    ),
+                    const SideMenuItem.divider(),
+                    SideMenuItem(
+                      icon: Icons.settings,
+                      title: 'Settings',
+                      onTap: () => Navigator.pop(context),
+                    ),
+                    SideMenuItem(
+                      icon: Icons.business,
+                      title: 'Departments',
+                      onTap: () {
+                        Navigator.pop(context);
+                        context.push('/departments');
+                      },
+                    ),
+                    SideMenuItem(
+                      icon: Icons.category,
+                      title: 'Department Types',
+                      onTap: () {
+                        Navigator.pop(context);
+                        context.push('/department-types');
+                      },
+                    ),
+                    SideMenuItem(
+                      icon: Icons.security,
+                      title: 'Roles & Permissions',
+                      onTap: () {
+                        Navigator.pop(context);
+                        context.push('/roles');
+                      },
+                    ),
+                  ],
                 ),
               ),
 

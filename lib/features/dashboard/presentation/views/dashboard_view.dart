@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:joby/features/auth/presentation/widgets/gradient_background.dart';
 import 'package:joby/features/dashboard/presentation/widgets/dashboard_drawer.dart';
@@ -76,7 +77,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                _buildOverviewCards(),
+                // _buildOverviewCards(),
               ],
             ),
           ),
@@ -85,7 +86,6 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
     );
   }
 
-  // "Glass" container helper
   BoxDecoration _glassDecoration() => BoxDecoration(
     color: Colors.white.withOpacity(0.14),
     borderRadius: BorderRadius.circular(18),
@@ -156,7 +156,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
           child: _QuickActionCardGlass(
             icon: Icons.person,
             label: 'Profile',
-            onTap: () {},
+            onTap: () => context.push('/profile'),
           ),
         ),
         const SizedBox(width: 12),
@@ -164,34 +164,17 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
           child: _QuickActionCardGlass(
             icon: Icons.business,
             label: 'Departments',
-            onTap: () {},
+            onTap: () => context.push('/departments'),
           ),
         ),
         const SizedBox(width: 12),
         Expanded(
           child: _QuickActionCardGlass(
             icon: Icons.group,
-            label: 'Team',
-            onTap: () {},
+            label: 'Roles & Permissions',
+            onTap: () => context.push('/roles'),
           ),
         ),
-      ],
-    );
-  }
-
-  Widget _buildOverviewCards() {
-    return GridView.count(
-      crossAxisCount: 2,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 12,
-      mainAxisSpacing: 12,
-      childAspectRatio: 1.55,
-      children: const [
-        _OverviewCardGlass(title: 'Departments', value: '-', icon: Icons.business),
-        _OverviewCardGlass(title: 'Team Members', value: '-', icon: Icons.group),
-        _OverviewCardGlass(title: 'Active Tasks', value: '-', icon: Icons.task_alt),
-        _OverviewCardGlass(title: 'Messages', value: '-', icon: Icons.message),
       ],
     );
   }
@@ -239,70 +222,6 @@ class _QuickActionCardGlass extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _OverviewCardGlass extends StatelessWidget {
-  final String title;
-  final String value;
-  final IconData icon;
-
-  const _OverviewCardGlass({
-    required this.title,
-    required this.value,
-    required this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.14),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white.withOpacity(0.20)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.16),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Icon(icon, color: Colors.white, size: 20),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.poppins(
-                    color: Colors.white.withOpacity(0.80),
-                    fontSize: 12,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  value,
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

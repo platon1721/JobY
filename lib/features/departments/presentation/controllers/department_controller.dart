@@ -10,7 +10,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'department_controller.g.dart';
 
-/// DepartmentController - haldab osakondade olekut ja operatsioone
 @riverpod
 class DepartmentController extends _$DepartmentController {
   @override
@@ -18,7 +17,6 @@ class DepartmentController extends _$DepartmentController {
     return const DepartmentState.initial();
   }
 
-  /// Laadi kõik osakonnad
   Future<void> loadAllDepartments() async {
     state = const DepartmentState.loading();
 
@@ -35,7 +33,6 @@ class DepartmentController extends _$DepartmentController {
     }
   }
 
-  /// Laadi osakond ID järgi
   Future<void> loadDepartmentById(String departmentId) async {
     state = const DepartmentState.loading();
 
@@ -54,7 +51,6 @@ class DepartmentController extends _$DepartmentController {
     }
   }
 
-  /// Loo uus osakond
   Future<bool> createDepartment({
     required String name,
     required String typeId,
@@ -65,7 +61,6 @@ class DepartmentController extends _$DepartmentController {
     try {
       final createDepartmentUseCase = ref.read(createDepartmentUseCaseProvider);
 
-      // Võta kasutaja ID auth staatusest
       final authState = ref.read(authControllerProvider);
       String? userId;
       if (authState is AuthStateAuthenticated) {
@@ -93,7 +88,6 @@ class DepartmentController extends _$DepartmentController {
         },
             (department) {
           state = const DepartmentState.success('Osakond edukalt loodud');
-          // Laadi uuesti nimekiri
           Future.delayed(const Duration(milliseconds: 500), () {
             loadAllDepartments();
           });
@@ -106,7 +100,6 @@ class DepartmentController extends _$DepartmentController {
     }
   }
 
-  /// Puhasta viga olek
   void clearError() {
     if (state is DepartmentStateError) {
       state = const DepartmentState.initial();

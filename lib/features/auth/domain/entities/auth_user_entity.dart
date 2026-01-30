@@ -1,26 +1,12 @@
 import 'package:equatable/equatable.dart';
 
-/// Auth user entity representing authenticated user from Firebase Auth
-/// 
-/// This is different from UserEntity which contains more detailed
-/// user information stored in Firestore.
+
 class AuthUserEntity extends Equatable {
-  /// Firebase Auth UID
   final String uid;
-  
-  /// User's email address
   final String email;
-  
-  /// Display name (optional)
   final String? displayName;
-  
-  /// Photo URL (optional)
   final String? photoURL;
-  
-  /// Whether email is verified
   final bool emailVerified;
-  
-  /// Account creation timestamp
   final DateTime? createdAt;
 
   const AuthUserEntity({
@@ -45,7 +31,6 @@ class AuthUserEntity extends Equatable {
   @override
   String toString() => 'AuthUserEntity(uid: $uid, email: $email)';
 
-  /// Copy with new values
   AuthUserEntity copyWith({
     String? uid,
     String? email,

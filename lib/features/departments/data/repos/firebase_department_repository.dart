@@ -8,8 +8,6 @@ import 'package:joby/features/departments/data/models/department_model.dart';
 import 'package:joby/features/departments/domain/entities/department_entity.dart';
 import 'package:joby/features/departments/domain/repos/department_repository.dart';
 
-/// Firebase implementation of DepartmentRepository
-/// Handles basic CRUD for departments (hierarchy is in DepartmentInDepartmentRepository)
 class FirebaseDepartmentRepository implements DepartmentRepository {
   final FirebaseFirestore _firestore;
   static const String _collectionName = 'departments';
@@ -145,7 +143,6 @@ class FirebaseDepartmentRepository implements DepartmentRepository {
         return Left(ValidationException('Department with name "$name" already exists'));
       }
 
-      // Create new department document
       final docRef = _collection.doc();
       final now = DateTime.now();
 
@@ -182,11 +179,9 @@ class FirebaseDepartmentRepository implements DepartmentRepository {
         return Left(NotFoundException('Department with id $departmentId not found'));
       }
 
-      // Build update map
       final updateData = <String, dynamic>{};
 
       if (name != null) {
-        // Check if new name is already taken
         final existingDepts = await _collection
             .where('name', isEqualTo: name)
             .where('active_till', isNull: true)
@@ -210,7 +205,6 @@ class FirebaseDepartmentRepository implements DepartmentRepository {
 
       await docRef.update(updateData);
 
-      // Fetch updated department
       final updatedDoc = await docRef.get();
       final updatedDepartment = DepartmentModel.fromFirestore(updatedDoc);
 
@@ -237,7 +231,6 @@ class FirebaseDepartmentRepository implements DepartmentRepository {
 
       await docRef.update({'hierarchy_level': newHierarchyLevel});
 
-      // Fetch updated department
       final updatedDoc = await docRef.get();
       final updatedDepartment = DepartmentModel.fromFirestore(updatedDoc);
 

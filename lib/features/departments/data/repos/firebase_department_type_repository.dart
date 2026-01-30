@@ -7,7 +7,6 @@ import 'package:joby/features/departments/data/models/department_type_model.dart
 import 'package:joby/features/departments/domain/entities/department_type_entity.dart';
 import 'package:joby/features/departments/domain/repos/department_type_repository.dart';
 
-/// Firebase implementation of DepartmentTypeRepository
 class FirebaseDepartmentTypeRepository implements DepartmentTypeRepository {
   final FirebaseFirestore _firestore;
   static const String _collectionName = 'department_types';
@@ -87,7 +86,6 @@ class FirebaseDepartmentTypeRepository implements DepartmentTypeRepository {
     required UserId createdBy,
   }) async {
     try {
-      // Check if type with this name already exists
       final existingTypes = await _collection
           .where('name', isEqualTo: name)
           .where('active_till', isNull: true)
@@ -100,7 +98,6 @@ class FirebaseDepartmentTypeRepository implements DepartmentTypeRepository {
         );
       }
 
-      // Create new department type document
       final docRef = _collection.doc();
       final now = DateTime.now();
 
@@ -136,11 +133,9 @@ class FirebaseDepartmentTypeRepository implements DepartmentTypeRepository {
         return Left(NotFoundException('DepartmentType with id $typeId not found'));
       }
 
-      // Build update map
       final updateData = <String, dynamic>{};
 
       if (name != null) {
-        // Check if new name is already taken
         final existingTypes = await _collection
             .where('name', isEqualTo: name)
             .where('active_till', isNull: true)
@@ -166,7 +161,6 @@ class FirebaseDepartmentTypeRepository implements DepartmentTypeRepository {
 
       await docRef.update(updateData);
 
-      // Fetch updated department type
       final updatedDoc = await docRef.get();
       final updatedType = DepartmentTypeModel.fromFirestore(updatedDoc);
 

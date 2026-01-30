@@ -55,7 +55,6 @@ class _RoleDetailViewState extends ConsumerState<RoleDetailView> {
   }
 
   Widget _buildRoleDetails(UserRoleEntity role, List<PermissionEntity> permissions) {
-    // Grupeeri õigused kategooriate järgi
     final groupedPermissions = <String, List<PermissionEntity>>{};
     for (final permission in permissions) {
       final category = permission.code.split('.').first;
@@ -67,7 +66,6 @@ class _RoleDetailViewState extends ConsumerState<RoleDetailView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header Card
           Card(
             child: Padding(
               padding: const EdgeInsets.all(20),
@@ -127,7 +125,6 @@ class _RoleDetailViewState extends ConsumerState<RoleDetailView> {
           ),
           const SizedBox(height: 24),
 
-          // Role Info
           Text(
             'Role Information',
             style: Theme.of(context).textTheme.titleMedium,

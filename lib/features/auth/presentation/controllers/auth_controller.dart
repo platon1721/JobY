@@ -16,38 +16,28 @@ part 'auth_controller.g.dart';
 class AuthController extends _$AuthController {
   @override
   AuthState build() {
-    // Listen to auth state changes
     _listenToAuthChanges();
-
-    // Check initial auth state
     _checkInitialAuthState();
 
     return const AuthState.initial();
   }
 
-  /// Listen to Firebase auth state changes
   void _listenToAuthChanges() {
     final authStateChangesUseCase = ref.read(authStateChangesUseCaseProvider);
 
     authStateChangesUseCase().listen((user) {
-      print('AUTH STREAM: received user: ${user?.uid}, current state: $state');
 
-      // Lisa ka registering kontroll!
       if (state is AuthStateError || state is AuthStateLoading || state is AuthStateRegistering) {
-        print('AUTH STREAM: ignoring because state is $state');
         return;
       }
       if (user != null) {
-        print('AUTH STREAM: setting authenticated');
         state = AuthState.authenticated(user);
       } else {
-        print('AUTH STREAM: setting unauthenticated');
         state = const AuthState.unauthenticated();
       }
     });
   }
 
-  /// Check initial authentication state
   Future<void> _checkInitialAuthState() async {
     final getCurrentUserUseCase = ref.read(getCurrentUserUseCaseProvider);
 
@@ -76,8 +66,60 @@ class AuthController extends _$AuthController {
     );
 
     result.fold(
-      (error) => state = AuthState.error(error.toString()),
-      (user) => state = AuthState.authenticated(user),
+          (error) => state = AuthState.error(error.toString()),
+          (user) => state = AuthState.authenticated(user),
+    );
+  }
+
+  /// Login with Google
+  Future<void> loginWithGoogle() async {
+    state = const AuthState.loading();
+
+    final loginWithGoogleUseCase = ref.read(loginWithGoogleUseCaseProvider);
+    final createUserUseCase = ref.read(createUserUseCaseProvider);
+    final userRepository = ref.read(userRepositoryProvider);
+
+    final result = await loginWithGoogleUseCase();
+
+    await result.fold(
+          (error) async {
+        state = AuthState.error(error.toString());
+      },
+          (authUser) async {
+
+        final existingUser = await userRepository.getUserById(authUser.uid);
+
+        await existingUser.fold(
+              (error) async {
+
+            final names = (authUser.displayName ?? 'User').split(' ');
+            final firstName = names.first;
+            final surName = names.length > 1 ? names.sublist(1).join(' ') : '';
+
+            final userResult = await createUserUseCase(
+              CreateUserParams(
+                userId: authUser.uid,
+                firstName: firstName,
+                surName: surName,
+                email: authUser.email,
+                createdBy: authUser.uid,
+              ),
+            );
+
+            userResult.fold(
+                  (error) {
+                state = AuthState.error('User creation failed: $error');
+              },
+                  (user) {
+                state = AuthState.authenticated(authUser);
+              },
+            );
+          },
+              (user) async {
+            state = AuthState.authenticated(authUser);
+          },
+        );
+      },
     );
   }
 
@@ -89,7 +131,6 @@ class AuthController extends _$AuthController {
     required String surName,
     String? displayName,
   }) async {
-    print('AUTH: register() started');
     state = const AuthState.loading();
 
     final registerUseCase = ref.read(registerUseCaseProvider);
@@ -105,14 +146,11 @@ class AuthController extends _$AuthController {
 
     await result.fold(
           (error) async {
-        print('AUTH: register failed: $error');
         final errorMessage = _getErrorMessage(error).toString();
         state = AuthState.error(errorMessage);
       },
           (authUser) async {
-        print('AUTH: auth success, creating user in Firestore...');
 
-        // Loo kasutaja kohe siin!
         final userResult = await createUserUseCase(
           CreateUserParams(
             userId: authUser.uid,
@@ -125,11 +163,9 @@ class AuthController extends _$AuthController {
 
         userResult.fold(
               (error) {
-            print('AUTH: user creation failed: $error');
             state = AuthState.error('User creation failed: $error');
           },
               (user) {
-            print('AUTH: user created successfully');
             state = AuthState.authenticated(authUser);
           },
         );
@@ -171,7 +207,7 @@ class AuthController extends _$AuthController {
     }
   }
 
-  /// Logout current user
+  /// Logout
   Future<void> logout() async {
     state = const AuthState.loading();
 
@@ -180,12 +216,11 @@ class AuthController extends _$AuthController {
     final result = await logoutUseCase();
 
     result.fold(
-      (error) => state = AuthState.error(error.toString()),
-      (_) => state = const AuthState.unauthenticated(),
+          (error) => state = AuthState.error(error.toString()),
+          (_) => state = const AuthState.unauthenticated(),
     );
   }
 
-  /// Send password reset email
   Future<void> sendPasswordResetEmail(String email) async {
     final sendResetEmailUseCase = ref.read(
       sendPasswordResetEmailUseCaseProvider,
@@ -196,11 +231,9 @@ class AuthController extends _$AuthController {
     );
 
     result.fold((error) => state = AuthState.error(error.toString()), (_) {
-      // Keep current state, just show success message
     });
   }
 
-  /// Clear error state
   void clearError() {
     if (state is AuthStateError) {
       state = const AuthState.unauthenticated();

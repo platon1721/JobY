@@ -5,7 +5,6 @@ import 'package:joby/core/domain/use_cases/common/use_case.dart';
 import 'package:joby/core/utils/typedef/department_id.dart';
 import 'package:joby/features/departments/domain/entities/department_entity.dart';
 
-/// Get all descendants of a department (full tree)
 class GetDepartmentHierarchyUseCase extends UseCase<List<DepartmentEntity>, GetDepartmentHierarchyParams> {
   final DepartmentInDepartmentRepository repository;
   GetDepartmentHierarchyUseCase(this.repository);

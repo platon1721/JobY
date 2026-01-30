@@ -5,13 +5,6 @@ import 'package:joby/core/domain/use_cases/common/use_case.dart';
 import 'package:joby/core/utils/typedef/department_id.dart';
 import 'package:joby/core/utils/typedef/user_id.dart';
 
-/// Use case for moving a department to a new parent
-/// 
-/// This handles all the complexity of:
-/// - Removing old parent relationship
-/// - Creating new parent relationship
-/// - Updating hierarchy levels
-/// - Validating circular references
 class MoveDepartmentUseCase extends UseCase<void, MoveDepartmentParams> {
   final DepartmentInDepartmentRepository repository;
   MoveDepartmentUseCase(this.repository);

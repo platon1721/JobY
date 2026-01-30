@@ -5,6 +5,7 @@ import 'package:joby/features/departments/presentation/controllers/department_co
 import 'package:joby/features/departments/presentation/controllers/department_hierarchy_controller.dart';
 import 'package:joby/features/departments/presentation/controllers/department_hierarchy_state.dart';
 import 'package:joby/features/departments/presentation/controllers/department_state.dart';
+import 'package:joby/features/departments/presentation/providers/department_providers.dart';
 
 class AddChildDepartmentDialog extends ConsumerStatefulWidget {
   final DepartmentEntity parentDepartment;
@@ -30,9 +31,9 @@ class _AddChildDepartmentDialogState
   @override
   void initState() {
     super.initState();
-    // Use Future.microtask to avoid modifying provider during build
     Future.microtask(() => _loadAvailableDepartments());
   }
+
 
   Future<void> _loadAvailableDepartments() async {
     setState(() {
@@ -41,70 +42,51 @@ class _AddChildDepartmentDialogState
     });
 
     try {
-      // Load all departments
-      await ref.read(departmentControllerProvider.notifier).loadAllDepartments();
+      final repository = ref.read(departmentRepositoryProvider);
+      final result = await repository.getAllDepartments();
 
-      final state = ref.read(departmentControllerProvider);
-
-      if (state is DepartmentStateLoaded) {
-        final departments = (state as DepartmentStateLoaded).departments;
-
-        // Filter out:
-        // 1. The parent itself
-        // 2. Departments already in the hierarchy under this parent
-        // 3. Ancestors of the parent (to prevent circular references)
-
-        final hierarchyController =
-        ref.read(departmentHierarchyControllerProvider.notifier);
-
-        // Get all descendants of parent
-        final descendants =
-        await hierarchyController.getAllDescendants(widget.parentDepartment.id);
-        final descendantIds = descendants.map((d) => d.id).toSet();
-
-        // Get ancestry path of parent
-        final hierarchyState = ref.read(departmentHierarchyControllerProvider);
-        Set<String> ancestorIds = {};
-
-        if (hierarchyState is DepartmentHierarchyStateLoaded) {
-          final ancestry = (hierarchyState as DepartmentHierarchyStateLoaded).ancestryPath;
-          if (ancestry != null) {
-            ancestorIds = ancestry.map((d) => d.id).toSet();
-          }
-        }
-
-        final available = departments.where((dept) {
-          // Exclude parent itself
-          if (dept.id == widget.parentDepartment.id) return false;
-          // Exclude descendants
-          if (descendantIds.contains(dept.id)) return false;
-          // Exclude ancestors (prevents circular reference)
-          if (ancestorIds.contains(dept.id)) return false;
-          // Only active departments
-          if (!dept.isActive) return false;
-
-          return true;
-        }).toList();
-
+      if (result.isLeft()) {
         if (mounted) {
           setState(() {
-            _availableDepartments = available;
+            _error = result.fold((l) => l.toString(), (r) => '');
             _isLoading = false;
           });
         }
-      } else if (state is DepartmentStateError) {
-        if (mounted) {
-          setState(() {
-            _error = (state as DepartmentStateError).message;
-            _isLoading = false;
-          });
-        }
-      } else {
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
-        }
+        return;
+      }
+
+      final departments = result.fold((l) => <DepartmentEntity>[], (r) => r);
+
+      final hierarchyController =
+      ref.read(departmentHierarchyControllerProvider.notifier);
+
+      final descendants =
+      await hierarchyController.getAllDescendants(widget.parentDepartment.id);
+      final descendantIds = descendants.map((d) => d.id).toSet();
+
+      final parentResult = await hierarchyController.getParentDepartment(widget.parentDepartment.id);
+      Set<String> ancestorIds = {widget.parentDepartment.id};
+
+      DepartmentEntity? current = parentResult;
+      while (current != null) {
+        ancestorIds.add(current.id);
+        current = await hierarchyController.getParentDepartment(current.id);
+      }
+
+      final available = departments.where((dept) {
+        if (dept.id == widget.parentDepartment.id) return false;
+        if (descendantIds.contains(dept.id)) return false;
+        if (ancestorIds.contains(dept.id)) return false;
+        if (!dept.isActive) return false;
+
+        return true;
+      }).toList();
+
+      if (mounted) {
+        setState(() {
+          _availableDepartments = available;
+          _isLoading = false;
+        });
       }
     } catch (e) {
       if (mounted) {
